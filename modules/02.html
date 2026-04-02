@@ -362,6 +362,27 @@
     <p>Three layers determine whether you show up in an AI answer. The first is <strong>pre-training</strong> — the massive data ingestion that happens before a model is released. Between 60% and 82% of that training data comes from crawled web pages. Your website, your blog posts, your documentation. That's the base layer of everything the model "knows." The second layer is <strong>real-time retrieval</strong> — when engines like Perplexity or ChatGPT with browsing pull fresh pages at query time. Here, 100% of what they surface comes from live web pages. The third layer is <strong>post-training preferences</strong> — RLHF, human feedback loops that teach the model which sources to trust and how to rank competing answers. Each layer has different rules. Each layer can be influenced differently.</p>
   </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">Three Layers of AI Visibility</div>
+    <pre class="mermaid">
+graph TD
+  subgraph L1[1. Pre-Training]
+    A[Web crawl to model weights]
+    A1[60-82% from crawled pages]
+  end
+  subgraph L2[2. Real-Time Retrieval]
+    B[Live page fetch at query time]
+    B1[100% from live web pages]
+  end
+  subgraph L3[3. Post-Training RLHF]
+    C[Human feedback and ranking]
+    C1[Source trust and answer quality]
+  end
+  L1 --> L2 --> L3
+  L3 -->|shapes| D[AI Answer]
+    </pre>
+  </div>
+
   <!-- ── Clip 01: How AI Engines Actually Work ── -->
   <div class="inline-clip reveal">
     <div class="inline-clip-header">
@@ -419,7 +440,19 @@
   <!-- ── Paragraphs 6–7 ── -->
   <div class="written-content reveal">
     <p>We frame all of this through four dimensions we call <strong>PRAI: Presence, Reputation, Alignment, Influence.</strong> Think of it like a brand survey, except the respondent is an AI engine. Does the model know you exist? (Presence.) Does it position you correctly against competitors? (Reputation.) Does it describe you the way you'd describe yourself? (Alignment.) Can you actually change what it says? (Influence.) Measure all four, and you have a clear picture of where your AI visibility stands — and what to fix first.</p>
+  </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">PRAI Framework</div>
+    <pre class="mermaid">
+graph LR
+  P[Presence] -->|Do they know you exist?| R[Reputation]
+  R -->|How are you positioned?| A[Alignment]
+  A -->|Does it match your intent?| I[Influence]
+    </pre>
+  </div>
+
+  <div class="written-content reveal">
     <p>This is the foundation. Every module after this one — content strategy, quality systems, distribution — builds on understanding how these engines work. Get this wrong and everything downstream is guesswork. Get it right and you're working with the infrastructure instead of against it.</p>
   </div>
 
@@ -484,6 +517,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');

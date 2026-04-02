@@ -402,7 +402,22 @@
     <p>What do AI engines reward when they're deciding what to cite? Four things. Content that's <strong>well-researched and well-attributed</strong> — sources, data, named experts. Content that's <strong>comprehensive</strong> — covers the topic thoroughly enough that the AI doesn't need to stitch together multiple sources. Content from <strong>brand-reputable</strong> domains — sites with authority signals, consistent publishing, real expertise. And content that's <strong>fresh</strong> — recently published or updated. Notice something? These aren't SEO tactics. These are qualities of content that's genuinely valuable to a human reader. The AI engines didn't invent new criteria. They just got better at measuring the old ones.</p>
   </div>
 
-  <!-- ── Clip 03: Content Strategy Walkthrough ── -->
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">What AI Engines Reward</div>
+    <pre class="mermaid">
+graph TD
+  Q[AI decides what to cite] --> A[Well-Researched]
+  Q --> B[Comprehensive]
+  Q --> C[Brand-Reputable]
+  Q --> D[Fresh]
+  A --> E[Gets cited in AI answers]
+  B --> E
+  C --> E
+  D --> E
+    </pre>
+  </div>
+
+  <!-- __ Clip 03: Content Strategy Walkthrough __ -->
   <div class="inline-clip reveal">
     <div class="inline-clip-header">
       <span class="inline-clip-badge">Clip 03</span>
@@ -500,6 +515,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');

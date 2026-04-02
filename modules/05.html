@@ -409,6 +409,25 @@
     <p>Most companies are at level one in most of these dimensions. They don't realize it because they're measuring the old way — rankings, traffic, bounce rates. The maturity model shows you where you actually stand and what the next level looks like.</p>
   </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">AEO Maturity Model</div>
+    <pre class="mermaid">
+graph LR
+  subgraph Content
+    C1[Keywords] -->|evolves to| C2[Answers]
+  end
+  subgraph Technical
+    T1[On-page SEO] -->|evolves to| T2[Structured Schema]
+  end
+  subgraph Authority
+    A1[Backlinks] -->|evolves to| A2[Mentions and Trust]
+  end
+  subgraph Measurement
+    M1[Rankings] -->|evolves to| M2[Share-of-Voice]
+  end
+    </pre>
+  </div>
+
   <!-- ── Clip 03: The 4-Pillar AEO Maturity Model ── -->
   <div class="inline-clip reveal">
     <div class="inline-clip-header">
@@ -433,6 +452,20 @@
     → <strong>Influence</strong> — Can you systematically improve all three over time? This isn't a one-time audit. This is an ongoing practice. The companies that win here are the ones that treat it like a muscle, not a project.</p>
 
     <p>The <strong>sphere of influence model</strong> makes this actionable. Start at the center — your website. It's fully controlled, it compounds over time, and it's where transactions happen. Then work outward to platforms you influence — LinkedIn, YouTube, GitHub, review sites. Things where you can publish and engage but don't own the algorithm. Then the outer ring: things you earn. Analyst reports, press coverage, word of mouth. Starting at the center isn't about ignoring the outer rings. It's about building from what you control so the outer rings have something real to reference.</p>
+  </div>
+
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">Sphere of Influence</div>
+    <pre class="mermaid">
+graph TB
+  subgraph Earn[Earn: analyst reports / press / word of mouth]
+    subgraph Influence[Influence: LinkedIn / YouTube / review sites]
+      subgraph Control[Control: Your Website]
+        CORE[Your domain - fully owned, compounds, transacts]
+      end
+    end
+  end
+    </pre>
   </div>
 
   <!-- ── Clip 04: PRAI Framework ── -->
@@ -554,6 +587,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');

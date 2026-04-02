@@ -381,6 +381,17 @@
     <p>Once you've scoped correctly, you need to understand the <strong>leading indicator cascade</strong>: indexed → impressions → clicks → engagement → conversion. Most teams skip straight to conversion, get a disappointing number three months later, and conclude "this doesn't work." That's like planting seeds on Monday and pulling them up on Friday to check for roots. The system teaches working the leading indicators first. If time-on-page is low, that tells you something specific — your content isn't engaging enough. If pages aren't getting indexed, you have a technical problem, not a content problem. Each stage is diagnostic. Each one tells you where to intervene.</p>
   </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">Leading Indicator Cascade</div>
+    <pre class="mermaid">
+graph LR
+  A[Indexed] -->|discoverable?| B[Impressions]
+  B -->|showing up?| C[Clicks]
+  C -->|engaging?| D[Engagement]
+  D -->|converting?| E[Conversion]
+    </pre>
+  </div>
+
   <!-- ── Clip 02: PRAI as Measurement Framework ── -->
   <div class="inline-clip reveal">
     <div class="inline-clip-header">
@@ -438,6 +449,18 @@
     <p>There's one more piece that catches teams off guard: <strong>the freshness imperative</strong>. Content older than 30 days gets 3.2x fewer citations. That's not a rounding error — it's the difference between compounding and decaying. Ninety-five percent of ChatGPT citations reference content less than 10 months old. If your best content is a year-old whitepaper you haven't touched, it's fading out of AI answers right now.</p>
 
     <p>The system teaches treating your site as a portfolio — borrowed from Jeff Wilkie's approach at Amazon. Every page is an asset. You manage which to invest in, which to refresh, and which to retire. The answer isn't fewer pages or all-manual updates — it's <strong>systematic portfolio management</strong> with AI agents handling freshness at scale. Update the data, refresh the examples, add the latest proof points. Keep the asset alive so it keeps compounding.</p>
+  </div>
+
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">Content Portfolio Management</div>
+    <pre class="mermaid">
+graph TD
+  AUDIT[Audit content portfolio] --> INVEST[Invest: high-performing pages]
+  AUDIT --> REFRESH[Refresh: aging assets over 30 days]
+  AUDIT --> RETIRE[Retire: low-value pages]
+  INVEST --> COMPOUND[Compounding citations]
+  REFRESH --> COMPOUND
+    </pre>
   </div>
 
   <!-- ── Clip 05: Connecting Measurement to Action ── -->
@@ -517,6 +540,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');

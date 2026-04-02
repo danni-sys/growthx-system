@@ -410,6 +410,18 @@
     <p>Here's the engine underneath everything we do: <strong>Content earns attention → Quality builds trust → Trust drives distribution → Distribution drives growth.</strong> Each layer feeds the next. Skip a layer and the whole thing stalls. Nail all four and you get a flywheel that accelerates on its own — the kind of compounding advantage that makes paid channels look expensive by comparison.</p>
   </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">The Growth Flywheel</div>
+    <pre class="mermaid">
+graph LR
+  A[Content] -->|earns| B[Attention]
+  B -->|builds| C[Trust]
+  C -->|drives| D[Distribution]
+  D -->|drives| E[Growth]
+  E -->|funds more| A
+    </pre>
+  </div>
+
   <!-- ── Clip 02: The Value-First Philosophy ── -->
   <div class="inline-clip reveal">
     <div class="inline-clip-header">
@@ -506,6 +518,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');

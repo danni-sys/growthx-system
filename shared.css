@@ -790,6 +790,36 @@ body {
   font-style: italic;
 }
 
+/* ── MERMAID DIAGRAMS ── */
+.mermaid-wrap {
+  margin: 36px 0;
+  padding: 28px 24px;
+  background: var(--clip-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.mermaid-wrap .mermaid {
+  display: flex;
+  justify-content: center;
+}
+
+.mermaid-wrap .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
 /* ── BUTTONS ── */
 .btn {
   display: inline-flex;

@@ -381,6 +381,20 @@
     <p>We boil the quality bar down to three words: <strong>credible, comprehensive, and fresh.</strong> Every process we build — research sprints, artifact creation, expert review cycles, freshness updates — serves one or more of these three pillars. Credible means sourced, attributed, factually verifiable. Comprehensive means the reader doesn't need to go somewhere else to complete their understanding. Fresh means updated with current data, recent examples, and real-world proof points. If content doesn't hit all three, it won't earn trust from readers or citations from AI engines. These aren't aspirational qualities. They're the minimum bar.</p>
   </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">Context vs. Prompt Engineering</div>
+    <pre class="mermaid">
+graph LR
+  subgraph OneShot[One-Shot Prompt]
+    P1[Elaborate prompt] --> O1[40-50% quality]
+  end
+  subgraph ContextLoaded[Context-Loaded]
+    P2[Simple prompt] --> CTX[Company context + Writing guidelines + Persona + Research]
+    CTX --> O2[Expert-level quality]
+  end
+    </pre>
+  </div>
+
   <!-- ── Clip 02: One-Shot vs. Context-Rich Demo ── -->
   <div class="inline-clip reveal">
     <div class="inline-clip-header">
@@ -518,6 +532,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');

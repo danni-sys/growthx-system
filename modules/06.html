@@ -440,7 +440,21 @@
     → <strong>Re-Anchor</strong> — ground the output back in your artifacts and quality bar. This is the move that prevents drift.</p>
 
     <p>Why does re-anchoring matter so much? Research shows quality drops sharply after about 10 conversation turns — <strong>17–35% degradation</strong>, what we call "context rot." The model starts losing the thread of who you are and what you're trying to say. The Shaping Loop prevents that by constantly pulling the conversation back to your source artifacts. Every re-anchor is a reset that keeps the quality ceiling high.</p>
+  </div>
 
+  <div class="mermaid-wrap reveal">
+    <div class="mermaid-label">The Shaping Loop</div>
+    <pre class="mermaid">
+graph LR
+  A[Flip] -->|reframe perspective| B[Spread]
+  B -->|explore structures| C[Articulate]
+  C -->|sharpen value| D[Chisel]
+  D -->|cut ruthlessly| E[Re-Anchor]
+  E -->|prevents context rot| A
+    </pre>
+  </div>
+
+  <div class="written-content reveal">
     <p>Stop optimizing prompts. Start investing in context. The prompt is the least important part of the equation.</p>
   </div>
 
@@ -505,6 +519,7 @@
   </div>
 </footer>
 
+<script src="../mermaid-init.js"></script>
 <script>
 (function () {
   var nodes = document.querySelectorAll('.reveal');
