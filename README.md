@@ -8,7 +8,7 @@ A free, gated lead magnet that teaches the mental models, frameworks, and first 
 
 This is the complete prototype for an 8-module masterclass that GrowthX gives away in exchange for some information. It's not a course — it's a system. It teaches operators *how to think* about AI-led growth so they can leverage any tool to drive results.
 
-The goal: generate qualified inbound leads for GrowthX and GrowthX.ai by leading with extreme value.
+The goal: generate qualified inbound leads for GrowthX by leading with extreme value.
 
 ## What's inside
 
