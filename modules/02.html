@@ -375,6 +375,18 @@
   .takeaways-card { padding: 24px; }
   .assessment-cta { padding: 24px; }
 }
+
+/* ── Written Content ── */
+.written-content {
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+}
+.written-content p { margin-bottom: 20px; }
+.written-content p:last-child { margin-bottom: 0; }
+.written-content strong { color: var(--text-primary); font-weight: 580; }
 </style>
 </head>
 <body>
@@ -487,6 +499,29 @@
     </div>
 
     <p class="clips-note reveal">Videos will be available once hosted. Clips are extracted and ready for upload.</p>
+  </div>
+</section>
+
+<!-- ════ THE THINKING ════ -->
+<section class="module-section">
+  <div class="section-inner">
+    <p class="section-label reveal">The Thinking</p>
+    <h2 class="section-title reveal reveal-d1">How the engines actually work</h2>
+    <div class="written-content reveal reveal-d2">
+      <p>Most people treat AI answers like magic. They type a question, get an answer, and never think about where it came from. But if you want to influence what AI says about your company, you need to understand the machinery underneath. It's not magic. <strong>It's infrastructure.</strong> And infrastructure can be shaped.</p>
+
+      <p>Three layers determine whether you show up in an AI answer. The first is <strong>pre-training</strong> — the massive data ingestion that happens before a model is released. Between 60% and 82% of that training data comes from crawled web pages. Your website, your blog posts, your documentation. That's the base layer of everything the model "knows." The second layer is <strong>real-time retrieval</strong> — when engines like Perplexity or ChatGPT with browsing pull fresh pages at query time. Here, 100% of what they surface comes from live web pages. The third layer is <strong>post-training preferences</strong> — RLHF, human feedback loops that teach the model which sources to trust and how to rank competing answers. Each layer has different rules. Each layer can be influenced differently.</p>
+
+      <p>Here's the part nobody talks about enough: <strong>your website is the atomic unit of AI visibility.</strong> Not your LinkedIn posts. Not your press releases. Not your social media presence. Your website — the thing you fully control, can update at any time, and can structure however you want. Social signals matter for distribution. But the raw material that AI engines consume? That's your site.</p>
+
+      <p>And here's the gap that keeps surprising us. When we audit companies at GrowthX — companies that rank beautifully in Google, that have strong SEO programs — <strong>over 50% have fundamental crawlability issues blocking AI engines.</strong> Cloudflare bot protection rules rejecting AI crawlers. CDN configurations serving blank pages to non-browser user agents. Robots.txt files that were written for Googlebot and accidentally block GPTBot, ClaudeBot, PerplexityBot. These companies are completely invisible to AI and have no idea. It's the most common technical gap we find, and it's usually a 30-minute fix once you know where to look.</p>
+
+      <p>Freshness is the other lever people underestimate. The data is stark: <strong>content older than 30 days gets 3.2x fewer AI citations.</strong> This isn't optional maintenance you get around to when you have spare bandwidth. It's the difference between being cited and being forgotten. AI engines have a strong recency bias — especially the retrieval layer — and content that hasn't been updated signals "possibly outdated" to the ranking algorithms. A simple freshness pass — new data points, updated examples, refreshed dates — can triple your citation rate.</p>
+
+      <p>We frame all of this through four dimensions we call <strong>PRAI: Presence, Reputation, Alignment, Influence.</strong> Think of it like a brand survey, except the respondent is an AI engine. Does the model know you exist? (Presence.) Does it position you correctly against competitors? (Reputation.) Does it describe you the way you'd describe yourself? (Alignment.) Can you actually change what it says? (Influence.) Measure all four, and you have a clear picture of where your AI visibility stands — and what to fix first.</p>
+
+      <p>This is the foundation. Every module after this one — content strategy, quality systems, distribution — builds on understanding how these engines work. Get this wrong and everything downstream is guesswork. Get it right and you're working with the infrastructure instead of against it.</p>
+    </div>
   </div>
 </section>
 
