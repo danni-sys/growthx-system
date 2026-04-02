@@ -33,7 +33,7 @@ The goal: generate qualified inbound leads for GrowthX by leading with extreme v
 ## What we're building toward
 
 - [ ] Marcel records the 15-minute System Overview (Module 01 — the hook video)
-- [ ] Cut 25 video clips from 11 source videos using the clip map scores and timestamps
+- [x] Cut 28 video clips from 8 source videos using the clip map scores and timestamps
 - [x] Package self-assessments as an interactive quiz component
 - [ ] Wire the email form to a real backend (HubSpot, ConvertKit, or similar)
 - [ ] Final copy review with Marcel and Danni
