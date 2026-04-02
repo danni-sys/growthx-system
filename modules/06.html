@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Module 06: Starter Prompts &amp; Artifacts — The GrowthX System</title>
 <meta name="description" content="Foundational artifacts, the Shaping Loop, and context-as-RAG. Short clips, deep written companions.">
+<script src="../theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..680;1,14..32,400..680&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="../theme.js"></script>
 <link rel="stylesheet" href="../shared.css">
 <style>
+:root { --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace; }
+
 .module-header {
-  padding: 120px clamp(16px, 4vw, 32px) 64px;
+  padding: 120px clamp(16px, 4vw, 32px) 48px;
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -23,26 +25,23 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #b8960c;
+  color: #b8922f;
   margin-bottom: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
-[data-theme="dark"] .module-overline { color: var(--yellow); }
+[data-theme="dark"] .module-overline { color: #d4a843; }
 
 .module-header h1 {
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 680;
   line-height: 1.08;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.05em;
   color: var(--text-primary);
   max-width: 720px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.module-desc {
+.module-header-desc {
   font-size: 17px;
   font-weight: 480;
   color: var(--text-secondary);
@@ -52,38 +51,40 @@
   margin-bottom: 32px;
 }
 
-.module-meta {
+.module-meta-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  font-size: 13px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  letter-spacing: 0.02em;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
 }
 
-.module-meta span {
+.module-meta-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 480;
+  color: var(--text-muted);
+  letter-spacing: -0.02em;
 }
 
-.module-meta svg {
-  width: 14px;
-  height: 14px;
+.module-meta-item svg {
+  width: 15px;
+  height: 15px;
   stroke: var(--text-muted);
   fill: none;
   stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  flex-shrink: 0;
 }
 
-/* ── Callout banner ── */
+/* ── Module Callout ── */
 .module-callout {
-  background: var(--secondary);
-  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid #b8922f;
   border-radius: var(--radius);
-  padding: 20px 24px;
+  padding: 16px 20px;
   margin-top: 32px;
   font-size: 14px;
   font-weight: 480;
@@ -92,201 +93,101 @@
   letter-spacing: -0.02em;
 }
 
+[data-theme="dark"] .module-callout { border-left-color: #d4a843; }
+
 .module-callout strong {
   color: var(--text-primary);
   font-weight: 580;
 }
 
-/* ── Video Clips ── */
-.clips-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
+/* ── Flow Container ── */
+.module-flow {
+  max-width: var(--content-inset);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
 }
 
-.clip-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s;
+.module-flow .written-content {
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
 }
 
-.clip-card:hover {
-  box-shadow: var(--shadow);
-  border-color: var(--text-muted);
+.module-flow .written-content p { margin-bottom: 20px; }
+.module-flow .written-content p:last-child { margin-bottom: 0; }
+.module-flow .written-content strong { color: var(--text-primary); font-weight: 580; }
+
+.module-flow .inline-clip {
+  margin: 40px 0;
+  max-width: 100%;
 }
 
-.clip-placeholder {
+.module-flow .inline-clip-body {
   aspect-ratio: 16 / 9;
-  background: #12121e;
+  background: #000;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
 }
 
-[data-theme="dark"] .clip-placeholder { background: #0c0c14; }
-
-.clip-placeholder svg {
-  width: 36px;
-  height: 36px;
+.module-flow .inline-clip-body svg {
+  width: 48px;
+  height: 48px;
   fill: rgba(255, 255, 255, 0.15);
 }
 
-.clip-placeholder span {
-  font-size: 12px;
-  font-weight: 480;
-  color: rgba(255, 255, 255, 0.25);
-  letter-spacing: -0.02em;
-}
-
-.clip-body {
-  padding: 20px;
-}
-
-.clip-number {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 450;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.clip-title {
-  font-size: 16px;
-  font-weight: 580;
-  letter-spacing: -0.03em;
-  line-height: 1.3;
-  margin-bottom: 6px;
-}
-
-.clip-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-}
-
-.clip-meta .dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--border);
-  flex-shrink: 0;
-}
-
-.clip-desc {
-  font-size: 14px;
-  font-weight: 480;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  letter-spacing: -0.02em;
-}
-
-.clips-note {
-  margin-top: 24px;
-  font-size: 13px;
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-/* ── Takeaways ── */
+/* ── Key Takeaways ── */
 .takeaways-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 32px;
+  margin-top: 56px;
+}
+
+.takeaways-card h3 {
+  font-size: 18px;
+  font-weight: 580;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
 }
 
 .takeaways-card ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .takeaways-card li {
   font-size: 15px;
   font-weight: 480;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.55;
   letter-spacing: -0.02em;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-subtle);
-  display: flex;
-  gap: 12px;
+  padding-left: 24px;
+  position: relative;
 }
-
-.takeaways-card li:last-child { border-bottom: none; }
 
 .takeaways-card li::before {
   content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #b8960c;
-  flex-shrink: 0;
-  margin-top: 9px;
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #b8922f;
 }
 
-[data-theme="dark"] .takeaways-card li::before { background: var(--yellow); }
+[data-theme="dark"] .takeaways-card li::before { background: #d4a843; }
 
-/* ── Companion Reading ── */
-.reading-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  background: var(--border-subtle);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.reading-item {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  padding: 16px 20px;
-  background: var(--surface);
-}
-
-.reading-badge {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  white-space: nowrap;
-  flex-shrink: 0;
-  background: var(--secondary);
-  color: var(--text-muted);
-}
-
-.reading-info { flex: 1; min-width: 0; }
-
-.reading-title {
-  font-size: 14px;
-  font-weight: 580;
-  letter-spacing: -0.03em;
-  line-height: 1.35;
-  margin-bottom: 2px;
-}
-
-.reading-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  letter-spacing: -0.02em;
-}
-
-/* ── Assessment Callout ── */
-.assessment-callout {
+/* ── Assessment CTA ── */
+.assessment-cta {
+  margin-top: 40px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -298,80 +199,143 @@
   flex-wrap: wrap;
 }
 
-.assessment-callout p {
-  font-size: 16px;
-  font-weight: 520;
+.assessment-cta-text h3 {
+  font-size: 18px;
+  font-weight: 580;
   letter-spacing: -0.03em;
+  margin-bottom: 6px;
 }
 
-.assessment-callout .sub {
+.assessment-cta-text p {
   font-size: 14px;
   font-weight: 480;
   color: var(--text-secondary);
-  margin-top: 4px;
+  letter-spacing: -0.02em;
 }
 
-/* ── Module Nav ── */
+/* ── Resources ── */
+.resources {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.resources h3 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 450;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.resources ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resources li {
+  font-size: 14px;
+  font-weight: 480;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+}
+
+.resources a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border);
+  transition: text-decoration-color 0.2s;
+}
+
+.resources a:hover {
+  text-decoration-color: var(--text-primary);
+}
+
+.resources .resource-type {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--secondary);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  margin-left: 8px;
+}
+
+/* ── Bottom Nav ── */
 .module-nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
-  padding: 0 clamp(16px, 4vw, 32px);
-  max-width: var(--content-normal);
-  margin: 0 auto 64px;
+  padding: 48px clamp(16px, 4vw, 32px);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .module-nav a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   text-decoration: none;
   color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 520;
-  letter-spacing: -0.03em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: opacity 0.2s;
 }
 
-.module-nav a:hover {
-  border-color: var(--text-muted);
-  box-shadow: var(--shadow-sm);
-}
+.module-nav a:hover { opacity: 0.7; }
 
-.module-nav .prev-label,
-.module-nav .next-label {
-  font-size: 12px;
+.module-nav-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 450;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  font-weight: 480;
 }
+
+.module-nav-title {
+  font-size: 15px;
+  font-weight: 580;
+  letter-spacing: -0.03em;
+}
+
+.module-nav-next { text-align: right; margin-left: auto; }
+
+.all-modules-link {
+  text-align: center;
+  padding: 0 0 40px;
+}
+
+.all-modules-link a {
+  font-size: 14px;
+  font-weight: 480;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+
+.all-modules-link a:hover { color: var(--text-primary); }
 
 @media (max-width: 768px) {
-  .module-header { padding: 100px 16px 48px; }
-  .clips-grid { grid-template-columns: 1fr; }
-  .module-nav { flex-direction: column; }
-  .assessment-callout { flex-direction: column; align-items: flex-start; }
-  .reading-item { flex-direction: column; gap: 6px; }
+  .module-header { padding: 100px 16px 40px; }
+  .assessment-cta { flex-direction: column; align-items: flex-start; }
 }
 
 @media (max-width: 480px) {
   .module-header h1 { letter-spacing: -0.04em; }
-  .takeaways-card { padding: 20px; }
+  .takeaways-card { padding: 24px; }
+  .assessment-cta { padding: 24px; }
 }
-
-/* ── Written Content ── */
-.written-content {
-  max-width: 640px;
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  letter-spacing: -0.02em;
-}
-.written-content p { margin-bottom: 20px; }
-.written-content p:last-child { margin-bottom: 0; }
-.written-content strong { color: var(--text-primary); font-weight: 580; }
 </style>
 </head>
 <body>
@@ -384,9 +348,8 @@
       <span class="nav-label">Module 06</span>
     </a>
     <div class="nav-links">
-      <a href="../index.html">Hub</a>
+      <a href="index.html">Modules</a>
       <a href="../system/index.html">Landing Page</a>
-      <a href="../inventory/index.html">Inventory</a>
       <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
       <button class="theme-toggle" aria-label="Toggle dark mode">
         <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -396,24 +359,19 @@
   </div>
 </nav>
 
-<!-- ── Module Header ── -->
 <header class="module-header">
   <p class="module-overline reveal">Module 06</p>
   <h1 class="reveal reveal-d1">Starter Prompts &amp; Artifacts</h1>
-  <p class="module-desc reveal reveal-d2">The foundational artifacts that make AI outputs yours. Company context, audience personas, writing guidelines — and the Shaping Loop that teaches you how to iterate any AI output from generic to great.</p>
-  <div class="module-meta reveal reveal-d3">
-    <span>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+  <p class="module-header-desc reveal reveal-d2">The foundational artifacts that make AI outputs yours. Company context, audience personas, writing guidelines — and the Shaping Loop that teaches you how to iterate any AI output from generic to great.</p>
+  <div class="module-meta-bar reveal reveal-d3">
+    <div class="module-meta-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       ~15 min
-    </span>
-    <span>
-      <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+    </div>
+    <div class="module-meta-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
       2 video clips
-    </span>
-    <span>
-      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      6 companion readings
-    </span>
+    </div>
   </div>
 
   <div class="module-callout reveal">
@@ -421,192 +379,118 @@
   </div>
 </header>
 
-<!-- ── Video Clips ── -->
-<section class="section">
-  <div class="section-inner">
-    <p class="section-label reveal">Video Clips</p>
-    <h2 class="section-title reveal reveal-d1">Watch in sequence</h2>
-    <p class="section-desc reveal reveal-d2">Watch in sequence for the intended learning flow.</p>
+<div class="module-flow">
 
-    <div class="clips-grid">
+  <!-- ── Opening context ── -->
+  <div class="written-content reveal">
+    <p>I watch this happen constantly. A team member spends two weeks perfecting their article-writing prompt. Tweaking the system instructions. Adding constraints. Rearranging the order of operations. The output improves — marginally. Meanwhile, another team member spends that same two weeks building a rich company context artifact, an audience persona document, and a writing guideline. They use a dead-simple prompt — "write me an article about X" — and the output is in a <strong>completely different class</strong>. Not 10% better. Unrecognizably better.</p>
 
-      <div class="clip-card reveal">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 01</p>
-          <h3 class="clip-title">The Shaping Loop</h3>
-          <div class="clip-meta">
-            <span>3.5 min</span>
-            <span class="dot"></span>
-            <span>chatgpt-shaping-loop-prompt-techniques</span>
-          </div>
-          <p class="clip-desc">FLIP / SPREAD / ARTICULATE / CHISEL / RE-ANCHOR with before/after examples. "Context rot" stat (17-35% degradation after 10 turns). Polished, zero screen dependency.</p>
-        </div>
-      </div>
+    <p>The difference isn't the prompt. It's the context.</p>
 
-      <div class="clip-card reveal reveal-d1">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 02</p>
-          <h3 class="clip-title">Context Artifacts as RAG Inputs</h3>
-          <div class="clip-meta">
-            <span>2 min</span>
-            <span class="dot"></span>
-            <span>why-ai-content-sounds-generic-rag</span>
-          </div>
-          <p class="clip-desc">Positioning docs, customer quotes, competitor analysis. "Output isn't generic anymore — it references your actual differentiators." $1.2B → $11B market data.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <p class="clips-note reveal">Videos will be available once hosted. Clips are extracted and ready for upload.</p>
+    <p>I demonstrate this live in workshops. I'll run the same generation twice — once with a bare prompt, once with context artifacts loaded. The gap shocks people every time. The first version reads like it could be about any company in any industry. The second version sounds like us. It references our actual positioning, uses language our buyers recognize, and makes arguments we'd actually make. It wasn't about the prompt — <strong>it was about the quality of the context.</strong></p>
   </div>
-</section>
 
-<!-- ── The Thinking ── -->
-<section class="module-section">
-  <div class="section-inner">
-    <p class="section-label reveal">The Thinking</p>
-    <h2 class="section-title reveal reveal-d1">Context beats prompt engineering — always</h2>
-    <div class="written-content reveal reveal-d2">
-      <p>I watch this happen constantly. A team member spends two weeks perfecting their article-writing prompt. Tweaking the system instructions. Adding constraints. Rearranging the order of operations. The output improves — marginally. Meanwhile, another team member spends that same two weeks building a rich company context artifact, an audience persona document, and a writing guideline. They use a dead-simple prompt — "write me an article about X" — and the output is in a <strong>completely different class</strong>. Not 10% better. Unrecognizably better.</p>
-
-      <p>The difference isn't the prompt. It's the context.</p>
-
-      <p>I demonstrate this live in workshops. I'll run the same generation twice — once with a bare prompt, once with context artifacts loaded. The gap shocks people every time. The first version reads like it could be about any company in any industry. The second version sounds like us. It references our actual positioning, uses language our buyers recognize, and makes arguments we'd actually make. It wasn't about the prompt — <strong>it was about the quality of the context.</strong></p>
-
-      <p>Three foundational artifacts make the biggest impact:</p>
-
-      <p>→ <strong>Company context</strong> — Not your "About Us" page. I mean the real stuff. Origin story, current business reality, market position, founder philosophy, customer reviews verbatim, competitor perception. A one-dimensional self-description produces one-dimensional content. If all the AI knows about you is "we're a B2B SaaS company that helps teams collaborate" — guess what kind of generic slop you're getting back.</p>
-
-      <p>→ <strong>Audience personas</strong> — Start with daily reality, not demographics. What does their actual job description look like? What work products do they deliver every week? What makes their day miserable? What triggers them to start evaluating solutions? Demographics tell you who they are on paper. Daily reality tells you what they care about at 2pm on a Tuesday. That's what makes content land.</p>
-
-      <p>→ <strong>Writing guidelines</strong> — The adjective spectrum exercise is one of the most powerful calibration tools I've seen. Where does your brand sit between "formal" and "casual"? Between "technical" and "accessible"? Between "provocative" and "measured"? Pair that with good/bad example pairs — "this sounds like us, this doesn't" — and you've given the model a voice it can actually hit. I compare these to cursor rules or claude.md files. They improve with every use. Every time you correct an output, you're refining the guideline.</p>
-
-      <p>But artifacts alone aren't enough. You need the meta-skill of iteration. That's what <strong>the Shaping Loop</strong> teaches:</p>
-
-      <p>→ <strong>Flip</strong> the angle — reframe the perspective entirely. If the draft reads like a vendor pitch, flip it to the buyer's inner monologue.<br>
-      → <strong>Spread</strong> — explore alternative structures. Listicle, narrative, framework breakdown, case study. Same content, different architecture.<br>
-      → <strong>Articulate</strong> — sharpen the specific value. Vague claims become concrete mechanisms. "We help you grow" becomes "we reduced CAC by 40% in 90 days."<br>
-      → <strong>Chisel</strong> — cut everything that doesn't serve the reader. If a paragraph exists because it sounds smart but doesn't move the piece forward, kill it.<br>
-      → <strong>Re-Anchor</strong> — ground the output back in your artifacts and quality bar. This is the move that prevents drift.</p>
-
-      <p>Why does re-anchoring matter so much? Research shows quality drops sharply after about 10 conversation turns — <strong>17–35% degradation</strong>, what we call "context rot." The model starts losing the thread of who you are and what you're trying to say. The Shaping Loop prevents that by constantly pulling the conversation back to your source artifacts. Every re-anchor is a reset that keeps the quality ceiling high.</p>
-
-      <p>Stop optimizing prompts. Start investing in context. The prompt is the least important part of the equation.</p>
+  <!-- ── Clip 01: The Shaping Loop ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 01</span>
+      <span class="inline-clip-title">The Shaping Loop — 3.5 min</span>
     </div>
-  </div>
-</section>
-
-<!-- ── Key Takeaways ── -->
-<section class="section">
-  <div class="section-inner">
-    <p class="section-label reveal">Key Takeaways</p>
-    <h2 class="section-title reveal reveal-d1">What sticks</h2>
-
-    <div class="takeaways-card reveal reveal-d2">
-      <ul>
-        <li><span><strong>Prompts are starting points, not endpoints.</strong> Context beats prompt engineering — always.</span></li>
-        <li><span><strong>Three foundational artifacts:</strong> company context, audience personas, and writing guidelines.</span></li>
-        <li><span><strong>The Shaping Loop</strong> (Flip / Spread / Articulate / Chisel / Re-Anchor) teaches the meta-skill of iterating AI outputs.</span></li>
-        <li><span><strong>Artifacts are living documents</strong> that improve through use — like cursor rules, they evolve with every iteration.</span></li>
-        <li><span><strong>Build personas from daily reality outward,</strong> not demographics inward.</span></li>
-      </ul>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-06/01-shaping-loop-walkthrough.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="inline-clip-caption">FLIP / SPREAD / ARTICULATE / CHISEL / RE-ANCHOR with before/after examples. "Context rot" stat (17-35% degradation after 10 turns).</div>
   </div>
-</section>
 
-<!-- ── Companion Reading ── -->
-<section class="section">
-  <div class="section-inner">
-    <p class="section-label reveal">Companion Reading</p>
-    <h2 class="section-title reveal reveal-d1">Go deeper</h2>
-    <p class="section-desc reveal reveal-d2">Private vault files — not linked externally.</p>
+  <!-- ── Three foundational artifacts ── -->
+  <div class="written-content reveal">
+    <p>Three foundational artifacts make the biggest impact:</p>
 
-    <div class="reading-list reveal reveal-d3">
-      <div class="reading-item">
-        <span class="reading-badge">ALG Library</span>
-        <div class="reading-info">
-          <p class="reading-title">simplified-prompting-playbook.md</p>
-          <p class="reading-desc">8 real-world expert prompts across marketing, sales, ops, product</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">ALG Library</span>
-        <div class="reading-info">
-          <p class="reading-title">practical-guide-improving-ai-outputs.md</p>
-          <p class="reading-desc">The Shaping Loop framework (written companion)</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">YouTube</span>
-        <div class="reading-info">
-          <p class="reading-title">chatgpt-shaping-loop-prompt-techniques.md</p>
-          <p class="reading-desc">Danni Roseman's video walkthrough</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">Editorial</span>
-        <div class="reading-info">
-          <p class="reading-title">content-strategy-05-editorial-manifesto-artifacts.md</p>
-          <p class="reading-desc">Artifact structures (company context, writing guidelines, audience persona)</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">Editorial</span>
-        <div class="reading-info">
-          <p class="reading-title">content-strategy-06-audience-research-methods.md</p>
-          <p class="reading-desc">Audience research prompt workflow</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">ALG Library</span>
-        <div class="reading-info">
-          <p class="reading-title">positioning-assessment.md</p>
-          <p class="reading-desc">12-question B2B positioning self-assessment</p>
-        </div>
-      </div>
+    <p>→ <strong>Company context</strong> — Not your "About Us" page. I mean the real stuff. Origin story, current business reality, market position, founder philosophy, customer reviews verbatim, competitor perception. A one-dimensional self-description produces one-dimensional content. If all the AI knows about you is "we're a B2B SaaS company that helps teams collaborate" — guess what kind of generic slop you're getting back.</p>
+
+    <p>→ <strong>Audience personas</strong> — Start with daily reality, not demographics. What does their actual job description look like? What work products do they deliver every week? What makes their day miserable? What triggers them to start evaluating solutions? Demographics tell you who they are on paper. Daily reality tells you what they care about at 2pm on a Tuesday. That's what makes content land.</p>
+
+    <p>→ <strong>Writing guidelines</strong> — The adjective spectrum exercise is one of the most powerful calibration tools I've seen. Where does your brand sit between "formal" and "casual"? Between "technical" and "accessible"? Between "provocative" and "measured"? Pair that with good/bad example pairs — "this sounds like us, this doesn't" — and you've given the model a voice it can actually hit. I compare these to cursor rules or claude.md files. They improve with every use. Every time you correct an output, you're refining the guideline.</p>
+  </div>
+
+  <!-- ── Clip 02: Context Artifacts as RAG Inputs ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 02</span>
+      <span class="inline-clip-title">Context Artifacts as RAG Inputs — 2 min</span>
     </div>
-  </div>
-</section>
-
-<!-- ── Assessment ── -->
-<section class="section">
-  <div class="section-inner">
-    <div class="assessment-callout reveal">
-      <div>
-        <p>Module 06 Assessment</p>
-        <p class="sub">Test your understanding — 6 questions for this module</p>
-      </div>
-      <a href="../assessments/index.html" class="btn btn-primary">Take Assessment →</a>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-06/02-context-artifacts-as-rag-inputs.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="inline-clip-caption">Positioning docs, customer quotes, competitor analysis. "Output isn't generic anymore — it references your actual differentiators."</div>
   </div>
-</section>
 
-<!-- ── Module Navigation ── -->
-<nav class="module-nav" aria-label="Module navigation">
+  <!-- ── Shaping Loop steps + context rot + closing ── -->
+  <div class="written-content reveal">
+    <p>But artifacts alone aren't enough. You need the meta-skill of iteration. That's what <strong>the Shaping Loop</strong> teaches:</p>
+
+    <p>→ <strong>Flip</strong> the angle — reframe the perspective entirely. If the draft reads like a vendor pitch, flip it to the buyer's inner monologue.<br>
+    → <strong>Spread</strong> — explore alternative structures. Listicle, narrative, framework breakdown, case study. Same content, different architecture.<br>
+    → <strong>Articulate</strong> — sharpen the specific value. Vague claims become concrete mechanisms. "We help you grow" becomes "we reduced CAC by 40% in 90 days."<br>
+    → <strong>Chisel</strong> — cut everything that doesn't serve the reader. If a paragraph exists because it sounds smart but doesn't move the piece forward, kill it.<br>
+    → <strong>Re-Anchor</strong> — ground the output back in your artifacts and quality bar. This is the move that prevents drift.</p>
+
+    <p>Why does re-anchoring matter so much? Research shows quality drops sharply after about 10 conversation turns — <strong>17–35% degradation</strong>, what we call "context rot." The model starts losing the thread of who you are and what you're trying to say. The Shaping Loop prevents that by constantly pulling the conversation back to your source artifacts. Every re-anchor is a reset that keeps the quality ceiling high.</p>
+
+    <p>Stop optimizing prompts. Start investing in context. The prompt is the least important part of the equation.</p>
+  </div>
+
+  <!-- ── Key Takeaways ── -->
+  <div class="takeaways-card reveal">
+    <h3>Key Takeaways</h3>
+    <ul>
+      <li><strong>Prompts are starting points, not endpoints.</strong> Context beats prompt engineering — always.</li>
+      <li><strong>Three foundational artifacts:</strong> company context, audience personas, and writing guidelines.</li>
+      <li><strong>The Shaping Loop</strong> (Flip / Spread / Articulate / Chisel / Re-Anchor) teaches the meta-skill of iterating AI outputs.</li>
+      <li><strong>Artifacts are living documents</strong> that improve through use — like cursor rules, they evolve with every iteration.</li>
+      <li><strong>Build personas from daily reality outward,</strong> not demographics inward.</li>
+    </ul>
+  </div>
+
+  <!-- ── Assessment CTA ── -->
+  <div class="assessment-cta reveal">
+    <div class="assessment-cta-text">
+      <h3>Test Your Understanding</h3>
+      <p>6 scenario-based questions for Module 06 — principles and thinking, not trivia.</p>
+    </div>
+    <a href="../assessments/index.html" class="btn btn-primary">Take the Assessment →</a>
+  </div>
+
+  <!-- ── Resources ── -->
+  <div class="resources reveal">
+    <h3>Resources</h3>
+    <ul>
+      <li><a href="https://youtu.be/NQ7LcGidkBk" target="_blank" rel="noopener noreferrer">How GrowthX Bootstrapped from 0 → $7m</a> <span class="resource-type">YouTube</span></li>
+      <li><a href="https://youtu.be/6HkMnPYeEWs" target="_blank" rel="noopener noreferrer">Vibe Marketing Workshop with Lovable</a> <span class="resource-type">YouTube</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ── Bottom Nav ── -->
+<div class="module-nav">
   <a href="05.html">
-    <span>←</span>
-    <span>
-      <span class="prev-label">Previous</span><br>
-      Module 05
-    </span>
+    <span class="module-nav-label">Previous Module</span>
+    <span class="module-nav-title">← 05 — AEO Masterclass</span>
   </a>
-  <a href="07.html">
-    <span>
-      <span class="next-label">Next</span><br>
-      Module 07
-    </span>
-    <span>→</span>
+  <a href="07.html" class="module-nav-next">
+    <span class="module-nav-label">Next Module</span>
+    <span class="module-nav-title">07 — Measurement &amp; Monitoring →</span>
   </a>
-</nav>
+</div>
+
+<div class="all-modules-link">
+  <a href="index.html">← View all modules</a>
+</div>
 
 <footer class="site-footer">
   <div class="footer-inner">
@@ -616,7 +500,6 @@
     </div>
     <div class="footer-links">
       <a href="../index.html">Hub</a>
-      <a href="../system/index.html">Landing Page</a>
       <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
     </div>
   </div>

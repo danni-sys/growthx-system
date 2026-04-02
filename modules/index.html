@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Modules — The GrowthX System</title>
+<meta name="description" content="7 modules that teach the mental models, frameworks, and first principles behind AI-led growth. Start anywhere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..680;1,14..32,400..680&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<script src="../theme.js"></script>
+<style>
+:root { --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace; }
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+.module-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s;
+}
+
+.module-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--text-muted);
+}
+
+.module-card-overline {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 450;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #b8922f;
+  margin-bottom: 10px;
+}
+
+[data-theme="dark"] .module-card-overline { color: #d4a843; }
+
+.module-card-title {
+  font-size: 18px;
+  font-weight: 580;
+  letter-spacing: -0.04em;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.module-card-desc {
+  font-size: 14px;
+  font-weight: 480;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.module-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 480;
+}
+
+.module-card-meta-sep {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.assessment-card {
+  border-left: 3px solid #b8922f;
+}
+
+[data-theme="dark"] .assessment-card {
+  border-left-color: #d4a843;
+}
+
+@media (max-width: 768px) {
+  .module-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/growthx-logo-dark.svg" alt="GrowthX" width="96" height="16">
+      <span class="nav-divider"></span>
+      <span class="nav-label">Modules</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Hub</a>
+      <a href="../system/index.html">Landing Page</a>
+      <a href="../inventory/index.html">Inventory</a>
+      <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
+      <button class="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <p class="hero-label reveal">The GrowthX System</p>
+  <h1 class="reveal reveal-d1">The modules.</h1>
+  <p class="hero-desc reveal reveal-d2">7 modules that teach the thinking behind AI-led growth. Each one stands alone — start wherever matches your biggest gap, or go in order for the full picture.</p>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="module-grid">
+
+      <a href="01.html" class="module-card reveal">
+        <p class="module-card-overline">Module 01</p>
+        <h2 class="module-card-title">The 15-Minute System Overview</h2>
+        <p class="module-card-desc">Why AI changed how buyers discover you, the value-first philosophy, and the sphere-of-influence model that frames the entire system.</p>
+        <div class="module-card-meta">
+          <span>~15 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>3 clips</span>
+        </div>
+      </a>
+
+      <a href="02.html" class="module-card reveal reveal-d1">
+        <p class="module-card-overline">Module 02</p>
+        <h2 class="module-card-title">AI Visibility Playbook</h2>
+        <p class="module-card-desc">How AI engines actually discover and cite your content — pre-training, retrieval, authority signals, and the technical foundations that make you visible.</p>
+        <div class="module-card-meta">
+          <span>~30 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>3 clips</span>
+        </div>
+      </a>
+
+      <a href="03.html" class="module-card reveal reveal-d2">
+        <p class="module-card-overline">Module 03</p>
+        <h2 class="module-card-title">Content Strategy Framework</h2>
+        <p class="module-card-desc">Audience-first content strategy — buyer question mapping, persona deep-dives, topic mapping, and the living artifacts that keep strategy honest.</p>
+        <div class="module-card-meta">
+          <span>~30 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>4 clips</span>
+        </div>
+      </a>
+
+      <a href="04.html" class="module-card reveal">
+        <p class="module-card-overline">Module 04</p>
+        <h2 class="module-card-title">Content Quality System</h2>
+        <p class="module-card-desc">Why one-shot AI content fails, the power of context over prompts, and the 5-component framework for expert-in-the-loop publishing.</p>
+        <div class="module-card-meta">
+          <span>~35 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>5 clips</span>
+        </div>
+      </a>
+
+      <a href="05.html" class="module-card reveal reveal-d1">
+        <p class="module-card-overline">Module 05</p>
+        <h2 class="module-card-title">AEO Masterclass</h2>
+        <p class="module-card-desc">Answer Engine Optimization from first principles. The 4-pillar maturity model, PRAI framework, and Webflow's credibility proof.</p>
+        <div class="module-card-meta">
+          <span>~40 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>6 clips</span>
+        </div>
+      </a>
+
+      <a href="06.html" class="module-card reveal reveal-d2">
+        <p class="module-card-overline">Module 06</p>
+        <h2 class="module-card-title">Starter Prompts &amp; Artifacts</h2>
+        <p class="module-card-desc">The foundational artifacts that make AI outputs yours — company context, personas, writing guidelines, and the Shaping Loop.</p>
+        <div class="module-card-meta">
+          <span>~15 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>2 clips</span>
+        </div>
+      </a>
+
+      <a href="07.html" class="module-card reveal">
+        <p class="module-card-overline">Module 07</p>
+        <h2 class="module-card-title">Measurement &amp; Monitoring</h2>
+        <p class="module-card-desc">Leading vs lagging indicators, PRAI as measurement, composite scoring, and connecting measurement to action.</p>
+        <div class="module-card-meta">
+          <span>~25 min</span>
+          <span class="module-card-meta-sep"></span>
+          <span>5 clips</span>
+        </div>
+      </a>
+
+      <a href="../assessments/index.html" class="module-card assessment-card reveal reveal-d1">
+        <p class="module-card-overline">Self-Assessment</p>
+        <h2 class="module-card-title">Test Your Understanding</h2>
+        <p class="module-card-desc">39 scenario-based questions across all 7 modules. Principles and thinking, not trivia. Filter by module or take them all.</p>
+        <div class="module-card-meta">
+          <span>39 questions</span>
+          <span class="module-card-meta-sep"></span>
+          <span>7 modules</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="../assets/growthx-logo-dark.svg" alt="" width="96" height="16" />
+      <span>&copy; 2026 GrowthX</span>
+    </div>
+    <div class="footer-links">
+      <a href="../index.html">Hub</a>
+      <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var nodes = document.querySelectorAll('.reveal');
+  if (!window.IntersectionObserver) {
+    nodes.forEach(function (el) { el.classList.add('visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('visible');
+      io.unobserve(entry.target);
+    });
+  }, { root: null, rootMargin: '0px 0px -48px 0px', threshold: 0.08 });
+  nodes.forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>

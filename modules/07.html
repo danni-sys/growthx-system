@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Module 07: Measurement &amp; Monitoring — The GrowthX System</title>
 <meta name="description" content="Leading vs lagging indicators, PRAI as measurement framework, composite scoring, and connecting measurement to action.">
+<script src="../theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..680;1,14..32,400..680&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="../theme.js"></script>
 <link rel="stylesheet" href="../shared.css">
 <style>
+:root { --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace; }
+
 .module-header {
-  padding: 120px clamp(16px, 4vw, 32px) 64px;
+  padding: 120px clamp(16px, 4vw, 32px) 48px;
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -23,26 +25,23 @@
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #b8960c;
+  color: #b8922f;
   margin-bottom: 16px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
-[data-theme="dark"] .module-overline { color: var(--yellow); }
+[data-theme="dark"] .module-overline { color: #d4a843; }
 
 .module-header h1 {
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 680;
   line-height: 1.08;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.05em;
   color: var(--text-primary);
   max-width: 720px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.module-desc {
+.module-header-desc {
   font-size: 17px;
   font-weight: 480;
   color: var(--text-secondary);
@@ -52,222 +51,121 @@
   margin-bottom: 32px;
 }
 
-.module-meta {
+.module-meta-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  font-size: 13px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  letter-spacing: 0.02em;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
 }
 
-.module-meta span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.module-meta svg {
-  width: 14px;
-  height: 14px;
-  stroke: var(--text-muted);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* ── Video Clips ── */
-.clips-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
-}
-
-.clip-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s;
-}
-
-.clip-card:hover {
-  box-shadow: var(--shadow);
-  border-color: var(--text-muted);
-}
-
-.clip-placeholder {
-  aspect-ratio: 16 / 9;
-  background: #12121e;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-[data-theme="dark"] .clip-placeholder { background: #0c0c14; }
-
-.clip-placeholder svg {
-  width: 36px;
-  height: 36px;
-  fill: rgba(255, 255, 255, 0.15);
-}
-
-.clip-placeholder span {
-  font-size: 12px;
-  font-weight: 480;
-  color: rgba(255, 255, 255, 0.25);
-  letter-spacing: -0.02em;
-}
-
-.clip-body {
-  padding: 20px;
-}
-
-.clip-number {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 450;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.clip-title {
-  font-size: 16px;
-  font-weight: 580;
-  letter-spacing: -0.03em;
-  line-height: 1.3;
-  margin-bottom: 6px;
-}
-
-.clip-meta {
+.module-meta-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-}
-
-.clip-meta .dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--border);
-  flex-shrink: 0;
-}
-
-.clip-desc {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 480;
-  color: var(--text-secondary);
-  line-height: 1.5;
+  color: var(--text-muted);
   letter-spacing: -0.02em;
 }
 
-.clips-note {
-  margin-top: 24px;
-  font-size: 13px;
-  color: var(--text-muted);
-  font-style: italic;
+.module-meta-item svg {
+  width: 15px;
+  height: 15px;
+  stroke: var(--text-muted);
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
 }
 
-/* ── Takeaways ── */
+/* ── Flow Container ── */
+.module-flow {
+  max-width: var(--content-inset);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+}
+
+.module-flow .written-content {
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+}
+
+.module-flow .written-content p { margin-bottom: 20px; }
+.module-flow .written-content p:last-child { margin-bottom: 0; }
+.module-flow .written-content strong { color: var(--text-primary); font-weight: 580; }
+
+.module-flow .inline-clip {
+  margin: 40px 0;
+  max-width: 100%;
+}
+
+.module-flow .inline-clip-body {
+  aspect-ratio: 16 / 9;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.module-flow .inline-clip-body svg {
+  width: 48px;
+  height: 48px;
+  fill: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Key Takeaways ── */
 .takeaways-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 32px;
+  margin-top: 56px;
+}
+
+.takeaways-card h3 {
+  font-size: 18px;
+  font-weight: 580;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
 }
 
 .takeaways-card ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .takeaways-card li {
   font-size: 15px;
   font-weight: 480;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.55;
   letter-spacing: -0.02em;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border-subtle);
-  display: flex;
-  gap: 12px;
+  padding-left: 24px;
+  position: relative;
 }
-
-.takeaways-card li:last-child { border-bottom: none; }
 
 .takeaways-card li::before {
   content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #b8960c;
-  flex-shrink: 0;
-  margin-top: 9px;
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #b8922f;
 }
 
-[data-theme="dark"] .takeaways-card li::before { background: var(--yellow); }
+[data-theme="dark"] .takeaways-card li::before { background: #d4a843; }
 
-/* ── Companion Reading ── */
-.reading-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  background: var(--border-subtle);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.reading-item {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  padding: 16px 20px;
-  background: var(--surface);
-}
-
-.reading-badge {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  white-space: nowrap;
-  flex-shrink: 0;
-  background: var(--secondary);
-  color: var(--text-muted);
-}
-
-.reading-info { flex: 1; min-width: 0; }
-
-.reading-title {
-  font-size: 14px;
-  font-weight: 580;
-  letter-spacing: -0.03em;
-  line-height: 1.35;
-  margin-bottom: 2px;
-}
-
-.reading-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  letter-spacing: -0.02em;
-}
-
-/* ── Assessment Callout ── */
-.assessment-callout {
+/* ── Assessment CTA ── */
+.assessment-cta {
+  margin-top: 40px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -279,78 +177,143 @@
   flex-wrap: wrap;
 }
 
-.assessment-callout p {
-  font-size: 16px;
-  font-weight: 520;
+.assessment-cta-text h3 {
+  font-size: 18px;
+  font-weight: 580;
   letter-spacing: -0.03em;
+  margin-bottom: 6px;
 }
 
-.assessment-callout .sub {
+.assessment-cta-text p {
   font-size: 14px;
   font-weight: 480;
   color: var(--text-secondary);
-  margin-top: 4px;
+  letter-spacing: -0.02em;
 }
 
-/* ── Module Nav ── */
+/* ── Resources ── */
+.resources {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.resources h3 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 450;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.resources ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resources li {
+  font-size: 14px;
+  font-weight: 480;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+}
+
+.resources a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border);
+  transition: text-decoration-color 0.2s;
+}
+
+.resources a:hover {
+  text-decoration-color: var(--text-primary);
+}
+
+.resources .resource-type {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--secondary);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  margin-left: 8px;
+}
+
+/* ── Bottom Nav ── */
 .module-nav {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   gap: 16px;
-  padding: 0 clamp(16px, 4vw, 32px);
-  max-width: var(--content-normal);
-  margin: 0 auto 64px;
+  padding: 48px clamp(16px, 4vw, 32px);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .module-nav a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   text-decoration: none;
   color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 520;
-  letter-spacing: -0.03em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: opacity 0.2s;
 }
 
-.module-nav a:hover {
-  border-color: var(--text-muted);
-  box-shadow: var(--shadow-sm);
-}
+.module-nav a:hover { opacity: 0.7; }
 
-.module-nav .prev-label {
-  font-size: 12px;
+.module-nav-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 450;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  font-weight: 480;
 }
+
+.module-nav-title {
+  font-size: 15px;
+  font-weight: 580;
+  letter-spacing: -0.03em;
+}
+
+.module-nav-next { text-align: right; margin-left: auto; }
+
+.all-modules-link {
+  text-align: center;
+  padding: 0 0 40px;
+}
+
+.all-modules-link a {
+  font-size: 14px;
+  font-weight: 480;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+
+.all-modules-link a:hover { color: var(--text-primary); }
 
 @media (max-width: 768px) {
-  .module-header { padding: 100px 16px 48px; }
-  .clips-grid { grid-template-columns: 1fr; }
-  .assessment-callout { flex-direction: column; align-items: flex-start; }
-  .reading-item { flex-direction: column; gap: 6px; }
+  .module-header { padding: 100px 16px 40px; }
+  .assessment-cta { flex-direction: column; align-items: flex-start; }
 }
 
 @media (max-width: 480px) {
   .module-header h1 { letter-spacing: -0.04em; }
-  .takeaways-card { padding: 20px; }
+  .takeaways-card { padding: 24px; }
+  .assessment-cta { padding: 24px; }
 }
-
-/* ── Written Content ── */
-.written-content {
-  max-width: 640px;
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-  letter-spacing: -0.02em;
-}
-.written-content p { margin-bottom: 20px; }
-.written-content p:last-child { margin-bottom: 0; }
-.written-content strong { color: var(--text-primary); font-weight: 580; }
 </style>
 </head>
 <body>
@@ -363,9 +326,8 @@
       <span class="nav-label">Module 07</span>
     </a>
     <div class="nav-links">
-      <a href="../index.html">Hub</a>
+      <a href="index.html">Modules</a>
       <a href="../system/index.html">Landing Page</a>
-      <a href="../inventory/index.html">Inventory</a>
       <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
       <button class="theme-toggle" aria-label="Toggle dark mode">
         <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -375,247 +337,172 @@
   </div>
 </nav>
 
-<!-- ── Module Header ── -->
 <header class="module-header">
   <p class="module-overline reveal">Module 07</p>
   <h1 class="reveal reveal-d1">Measurement &amp; Monitoring</h1>
-  <p class="module-desc reveal reveal-d2">What to measure, how to measure it, and how to connect measurement to action. Leading indicators, PRAI as a measurement framework, composite scoring, and maturity progression.</p>
-  <div class="module-meta reveal reveal-d3">
-    <span>
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+  <p class="module-header-desc reveal reveal-d2">What to measure, how to measure it, and how to connect measurement to action. Leading indicators, PRAI as a measurement framework, composite scoring, and maturity progression.</p>
+  <div class="module-meta-bar reveal reveal-d3">
+    <div class="module-meta-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       ~25 min
-    </span>
-    <span>
-      <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+    </div>
+    <div class="module-meta-item">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
       5 video clips
-    </span>
-    <span>
-      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      6 companion readings
-    </span>
+    </div>
   </div>
 </header>
 
-<!-- ── Video Clips ── -->
-<section class="section">
-  <div class="section-inner">
-    <p class="section-label reveal">Video Clips</p>
-    <h2 class="section-title reveal reveal-d1">Watch in sequence</h2>
-    <p class="section-desc reveal reveal-d2">Watch in sequence for the intended learning flow.</p>
+<div class="module-flow">
 
-    <div class="clips-grid">
+  <!-- ── Paragraphs 1-2 ── -->
+  <div class="written-content reveal">
+    <p>The most common measurement mistake I see? A CMO asks their team for "one number that shows how we're doing in AI." The team dutifully tracks total AI mentions across all engines and reports it monthly. That number is <strong>meaningless</strong>. It mixes awareness queries — where brands almost never appear — with evaluation queries where they do. It blends engines that behave completely differently into a single average. The data is dirty from day one, and every decision built on it is wrong.</p>
 
-      <div class="clip-card reveal">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 01</p>
-          <h3 class="clip-title">What to Measure First</h3>
-          <div class="clip-meta">
-            <span>5 min</span>
-            <span class="dot"></span>
-            <span>ai-visibility-playbook-workshop</span>
-          </div>
-          <p class="clip-desc">Leading vs lagging indicators. The tracking cascade: index → impression → click → engagement → conversion. "Don't start with conversions."</p>
-        </div>
-      </div>
-
-      <div class="clip-card reveal reveal-d1">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 02</p>
-          <h3 class="clip-title">PRAI as Measurement Framework</h3>
-          <div class="clip-meta">
-            <span>6 min</span>
-            <span class="dot"></span>
-            <span>ai-visibility-playbook-workshop</span>
-          </div>
-          <p class="clip-desc">Presence, Reputation, Alignment, Influence applied to metrics. "Websites control 82% of training data and 100% of retrieval."</p>
-        </div>
-      </div>
-
-      <div class="clip-card reveal reveal-d2">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 03</p>
-          <h3 class="clip-title">Measurement Maturity Progression</h3>
-          <div class="clip-meta">
-            <span>2.5 min</span>
-            <span class="dot"></span>
-            <span>aeo-with-guy-from-webflow</span>
-          </div>
-          <p class="clip-desc">Keyword ranking → ad-hoc mention checking → systematic measurement → share-of-voice + sentiment. "95% of ChatGPT citations &lt; 10 months old."</p>
-        </div>
-      </div>
-
-      <div class="clip-card reveal">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 04</p>
-          <h3 class="clip-title">Composite Scoring</h3>
-          <div class="clip-meta">
-            <span>3.5 min</span>
-            <span class="dot"></span>
-            <span>ai-visibility-playbook-workshop</span>
-          </div>
-          <p class="clip-desc">Visibility + position + sentiment + consistency + cross-engine. Citation rate by vendor, four-quadrant market analysis, Amazon catalog investment analogy.</p>
-        </div>
-      </div>
-
-      <div class="clip-card reveal reveal-d1">
-        <div class="clip-placeholder">
-          <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <span>Video not yet hosted — clip ready for upload</span>
-        </div>
-        <div class="clip-body">
-          <p class="clip-number">Clip 05</p>
-          <h3 class="clip-title">Connecting Measurement to Action</h3>
-          <div class="clip-meta">
-            <span>3 min</span>
-            <span class="dot"></span>
-            <span>vibe-marketing-ceci-lovable</span>
-          </div>
-          <p class="clip-desc">Good-fit / bad-fit × high-intent / low-intent 2×2 framework. Deepgram 80% response rate from doc page visitors.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <p class="clips-note reveal">Videos will be available once hosted. Clips are extracted and ready for upload.</p>
+    <p>The measurement discipline starts with scoping. I'm adamant about this: <strong>scope your prompts tightly to commercial intent within specific buying categories.</strong> If you ask ChatGPT "What is AI?" — it's not going to recommend a tool. That's an awareness-stage question. But "What are the best AEO agencies for B2B SaaS?" — that's an evaluation-stage query where brands appear on shortlists, where positioning matters, where the answer functionally replaces a sales conversation. That's where measurement matters.</p>
   </div>
-</section>
 
-<!-- ── The Thinking ── -->
-<section class="module-section">
-  <div class="section-inner">
-    <p class="section-label reveal">The Thinking</p>
-    <h2 class="section-title reveal reveal-d1">Measuring what actually matters</h2>
-    <div class="written-content reveal reveal-d2">
-      <p>The most common measurement mistake I see? A CMO asks their team for "one number that shows how we're doing in AI." The team dutifully tracks total AI mentions across all engines and reports it monthly. That number is <strong>meaningless</strong>. It mixes awareness queries — where brands almost never appear — with evaluation queries where they do. It blends engines that behave completely differently into a single average. The data is dirty from day one, and every decision built on it is wrong.</p>
-
-      <p>The measurement discipline starts with scoping. I'm adamant about this: <strong>scope your prompts tightly to commercial intent within specific buying categories.</strong> If you ask ChatGPT "What is AI?" — it's not going to recommend a tool. That's an awareness-stage question. But "What are the best AEO agencies for B2B SaaS?" — that's an evaluation-stage query where brands appear on shortlists, where positioning matters, where the answer functionally replaces a sales conversation. That's where measurement matters.</p>
-
-      <p>Once you've scoped correctly, you need to understand the <strong>leading indicator cascade</strong>: indexed → impressions → clicks → engagement → conversion. Most teams skip straight to conversion, get a disappointing number three months later, and conclude "this doesn't work." That's like planting seeds on Monday and pulling them up on Friday to check for roots. The system teaches working the leading indicators first. If time-on-page is low, that tells you something specific — your content isn't engaging enough. If pages aren't getting indexed, you have a technical problem, not a content problem. Each stage is diagnostic. Each one tells you where to intervene.</p>
-
-      <p><strong>Cross-engine measurement is non-negotiable.</strong> Our research across 600,000+ citations and over 1 million AI answers confirmed what we suspected: each engine operates completely differently. Citation patterns in ChatGPT don't predict citation patterns in Claude or Perplexity. The ranking factors are different. The freshness signals are different. The way they handle ambiguity is different. Your buyers use multiple engines — the blind spots in any single one are invisible unless you're watching all of them.</p>
-
-      <p>Think of it like the <strong>brand survey analogy</strong>. You can't measure a billboard's ROI directly. But you can survey for recall — "Have you seen this brand?" You can measure perception — "What do you associate with this brand?" You can check alignment — "Does this description match what the brand wants to be known for?" AI visibility works the same way. You measure whether AI "recalls" your brand in relevant contexts, positions you accurately, and describes you in ways that match your actual positioning. It's the same discipline applied to a new channel. And just like brand surveys, the value isn't in any single data point — it's in the trend over time.</p>
-
-      <p>There's one more piece that catches teams off guard: <strong>the freshness imperative</strong>. Content older than 30 days gets 3.2x fewer citations. That's not a rounding error — it's the difference between compounding and decaying. Ninety-five percent of ChatGPT citations reference content less than 10 months old. If your best content is a year-old whitepaper you haven't touched, it's fading out of AI answers right now.</p>
-
-      <p>The system teaches treating your site as a portfolio — borrowed from Jeff Wilkie's approach at Amazon. Every page is an asset. You manage which to invest in, which to refresh, and which to retire. The answer isn't fewer pages or all-manual updates — it's <strong>systematic portfolio management</strong> with AI agents handling freshness at scale. Update the data, refresh the examples, add the latest proof points. Keep the asset alive so it keeps compounding.</p>
-
-      <p>Measurement is where the discipline becomes real. Without it, you're flying blind — making content decisions on gut feel and hoping the AI engines notice. With it, you can diagnose problems at the right level, prove ROI to the people who control budget, and build the case for continued investment. That's the difference between a one-time audit and a sustainable growth engine.</p>
+  <!-- ── Clip 01: What to Measure First ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 01</span>
+      <span class="inline-clip-title">What to Measure First — 5 min</span>
     </div>
-  </div>
-</section>
-
-<!-- ── Key Takeaways ── -->
-<section class="section">
-  <div class="section-inner">
-    <p class="section-label reveal">Key Takeaways</p>
-    <h2 class="section-title reveal reveal-d1">What sticks</h2>
-
-    <div class="takeaways-card reveal reveal-d2">
-      <ul>
-        <li><span><strong>Start with leading indicators</strong> (indexed → impressions → clicks → engagement), not conversion. Conversion is a lagging indicator.</span></li>
-        <li><span><strong>PRAI</strong> (Presence, Reputation, Alignment, Influence) applies to measurement just as it does to strategy.</span></li>
-        <li><span><strong>Scope measurement to evaluation-stage queries</strong> within your buying categories — not vanity metrics across the funnel.</span></li>
-        <li><span><strong>Cross-engine measurement is critical:</strong> each AI engine operates completely differently.</span></li>
-        <li><span><strong>Treat your site as a portfolio</strong> — continuously monitor, refresh, and optimize. Content older than 30 days gets 3.2x fewer citations.</span></li>
-      </ul>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-07/01-leading-vs-lagging-indicators.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="inline-clip-caption">Leading vs lagging indicators. The tracking cascade: index → impression → click → engagement → conversion. "Don't start with conversions."</div>
   </div>
-</section>
 
-<!-- ── Companion Reading ── -->
-<section class="section">
-  <div class="section-inner">
-    <p class="section-label reveal">Companion Reading</p>
-    <h2 class="section-title reveal reveal-d1">Go deeper</h2>
-    <p class="section-desc reveal reveal-d2">Private vault files — not linked externally.</p>
+  <!-- ── Paragraph 3 ── -->
+  <div class="written-content reveal">
+    <p>Once you've scoped correctly, you need to understand the <strong>leading indicator cascade</strong>: indexed → impressions → clicks → engagement → conversion. Most teams skip straight to conversion, get a disappointing number three months later, and conclude "this doesn't work." That's like planting seeds on Monday and pulling them up on Friday to check for roots. The system teaches working the leading indicators first. If time-on-page is low, that tells you something specific — your content isn't engaging enough. If pages aren't getting indexed, you have a technical problem, not a content problem. Each stage is diagnostic. Each one tells you where to intervene.</p>
+  </div>
 
-    <div class="reading-list reveal reveal-d3">
-      <div class="reading-item">
-        <span class="reading-badge">Workshop</span>
-        <div class="reading-info">
-          <p class="reading-title">ai-visibility-playbook-workshop.md</p>
-          <p class="reading-desc">Measurement section from the full playbook</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">Workshop</span>
-        <div class="reading-info">
-          <p class="reading-title">aeo-with-guy-from-webflow.md</p>
-          <p class="reading-desc">Guy Yalif on measurement maturity</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">Newsletter</span>
-        <div class="reading-info">
-          <p class="reading-title">monitoring-ai-mentions-citations.md</p>
-          <p class="reading-desc">Workflow for tracking ROI, LLM referrals, citations</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">Research</span>
-        <div class="reading-info">
-          <p class="reading-title">checkthat-geo-aeo-citation-study.md</p>
-          <p class="reading-desc">196 features, 16 stratified models, vendor-specific measurement</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">ALG Library</span>
-        <div class="reading-info">
-          <p class="reading-title">landing-page-spec-components.md</p>
-          <p class="reading-desc">7-component framework with success metrics</p>
-        </div>
-      </div>
-      <div class="reading-item">
-        <span class="reading-badge">ALG Library</span>
-        <div class="reading-info">
-          <p class="reading-title">conversion-vault-library.md</p>
-          <p class="reading-desc">CRO frameworks and A/B test patterns</p>
-        </div>
-      </div>
+  <!-- ── Clip 02: PRAI as Measurement Framework ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 02</span>
+      <span class="inline-clip-title">PRAI as Measurement Framework — 6 min</span>
     </div>
-  </div>
-</section>
-
-<!-- ── Assessment ── -->
-<section class="section">
-  <div class="section-inner">
-    <div class="assessment-callout reveal">
-      <div>
-        <p>Module 07 Assessment</p>
-        <p class="sub">Test your understanding — 6 questions for this module</p>
-      </div>
-      <a href="../assessments/index.html" class="btn btn-primary">Take Assessment →</a>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-07/02-prai-measurement-framework.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="inline-clip-caption">Presence, Reputation, Alignment, Influence applied to metrics. "Websites control 82% of training data and 100% of retrieval."</div>
   </div>
-</section>
 
-<!-- ── Module Navigation ── -->
-<nav class="module-nav" aria-label="Module navigation">
+  <!-- ── Paragraph 4 ── -->
+  <div class="written-content reveal">
+    <p><strong>Cross-engine measurement is non-negotiable.</strong> Our research across 600,000+ citations and over 1 million AI answers confirmed what we suspected: each engine operates completely differently. Citation patterns in ChatGPT don't predict citation patterns in Claude or Perplexity. The ranking factors are different. The freshness signals are different. The way they handle ambiguity is different. Your buyers use multiple engines — the blind spots in any single one are invisible unless you're watching all of them.</p>
+  </div>
+
+  <!-- ── Clip 03: Measurement Maturity Progression ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 03</span>
+      <span class="inline-clip-title">Measurement Maturity Progression — 2.5 min</span>
+    </div>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-07/03-measurement-maturity-progression.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="inline-clip-caption">Keyword ranking → ad-hoc mention checking → systematic measurement → share-of-voice + sentiment. "95% of ChatGPT citations &lt; 10 months old."</div>
+  </div>
+
+  <!-- ── Paragraph 5 ── -->
+  <div class="written-content reveal">
+    <p>Think of it like the <strong>brand survey analogy</strong>. You can't measure a billboard's ROI directly. But you can survey for recall — "Have you seen this brand?" You can measure perception — "What do you associate with this brand?" You can check alignment — "Does this description match what the brand wants to be known for?" AI visibility works the same way. You measure whether AI "recalls" your brand in relevant contexts, positions you accurately, and describes you in ways that match your actual positioning. It's the same discipline applied to a new channel. And just like brand surveys, the value isn't in any single data point — it's in the trend over time.</p>
+  </div>
+
+  <!-- ── Clip 04: Composite Scoring ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 04</span>
+      <span class="inline-clip-title">Composite Scoring — 3.5 min</span>
+    </div>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-07/04-composite-scoring.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="inline-clip-caption">Visibility + position + sentiment + consistency + cross-engine. Citation rate by vendor, four-quadrant market analysis.</div>
+  </div>
+
+  <!-- ── Paragraphs 6-7 ── -->
+  <div class="written-content reveal">
+    <p>There's one more piece that catches teams off guard: <strong>the freshness imperative</strong>. Content older than 30 days gets 3.2x fewer citations. That's not a rounding error — it's the difference between compounding and decaying. Ninety-five percent of ChatGPT citations reference content less than 10 months old. If your best content is a year-old whitepaper you haven't touched, it's fading out of AI answers right now.</p>
+
+    <p>The system teaches treating your site as a portfolio — borrowed from Jeff Wilkie's approach at Amazon. Every page is an asset. You manage which to invest in, which to refresh, and which to retire. The answer isn't fewer pages or all-manual updates — it's <strong>systematic portfolio management</strong> with AI agents handling freshness at scale. Update the data, refresh the examples, add the latest proof points. Keep the asset alive so it keeps compounding.</p>
+  </div>
+
+  <!-- ── Clip 05: Connecting Measurement to Action ── -->
+  <div class="inline-clip reveal">
+    <div class="inline-clip-header">
+      <span class="inline-clip-badge">Clip 05</span>
+      <span class="inline-clip-title">Connecting Measurement to Action — 3 min</span>
+    </div>
+    <div class="inline-clip-body">
+      <video controls preload="metadata" playsinline style="width:100%;display:block;background:#000;">
+        <source src="../videos/module-07/05-measurement-to-action.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="inline-clip-caption">Good-fit / bad-fit × high-intent / low-intent 2×2 framework. Deepgram 80% response rate from doc page visitors.</div>
+  </div>
+
+  <!-- ── Paragraph 8 ── -->
+  <div class="written-content reveal">
+    <p>Measurement is where the discipline becomes real. Without it, you're flying blind — making content decisions on gut feel and hoping the AI engines notice. With it, you can diagnose problems at the right level, prove ROI to the people who control budget, and build the case for continued investment. That's the difference between a one-time audit and a sustainable growth engine.</p>
+  </div>
+
+  <!-- ── Key Takeaways ── -->
+  <div class="takeaways-card reveal">
+    <h3>Key Takeaways</h3>
+    <ul>
+      <li><strong>Start with leading indicators</strong> (indexed → impressions → clicks → engagement), not conversion. Conversion is a lagging indicator.</li>
+      <li><strong>PRAI</strong> (Presence, Reputation, Alignment, Influence) applies to measurement just as it does to strategy.</li>
+      <li><strong>Scope measurement to evaluation-stage queries</strong> within your buying categories — not vanity metrics across the funnel.</li>
+      <li><strong>Cross-engine measurement is critical:</strong> each AI engine operates completely differently.</li>
+      <li><strong>Treat your site as a portfolio</strong> — continuously monitor, refresh, and optimize. Content older than 30 days gets 3.2x fewer citations.</li>
+    </ul>
+  </div>
+
+  <!-- ── Assessment CTA ── -->
+  <div class="assessment-cta reveal">
+    <div class="assessment-cta-text">
+      <h3>Test Your Understanding</h3>
+      <p>6 scenario-based questions for Module 07 — principles and thinking, not trivia.</p>
+    </div>
+    <a href="../assessments/index.html" class="btn btn-primary">Take the Assessment →</a>
+  </div>
+
+  <!-- ── Resources ── -->
+  <div class="resources reveal">
+    <h3>Resources</h3>
+    <ul>
+      <li><a href="https://youtu.be/7NKPOiMGYaM" target="_blank" rel="noopener noreferrer">AI Visibility Playbook Workshop</a> <span class="resource-type">YouTube</span></li>
+      <li><a href="https://youtu.be/k9ZNoitjXCM" target="_blank" rel="noopener noreferrer">AEO Workshop with Guy Yalif from Webflow</a> <span class="resource-type">YouTube</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ── Bottom Nav ── -->
+<div class="module-nav">
   <a href="06.html">
-    <span>←</span>
-    <span>
-      <span class="prev-label">Previous</span><br>
-      Module 06
-    </span>
+    <span class="module-nav-label">Previous Module</span>
+    <span class="module-nav-title">← 06 — Starter Prompts &amp; Artifacts</span>
   </a>
-</nav>
+  <div></div>
+</div>
+
+<div class="all-modules-link">
+  <a href="index.html">← View all modules</a>
+</div>
 
 <footer class="site-footer">
   <div class="footer-inner">
@@ -625,7 +512,6 @@
     </div>
     <div class="footer-links">
       <a href="../index.html">Hub</a>
-      <a href="../system/index.html">Landing Page</a>
       <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
     </div>
   </div>

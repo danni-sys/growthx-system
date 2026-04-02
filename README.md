@@ -15,7 +15,8 @@ The goal: generate qualified inbound leads for GrowthX by leading with extreme v
 | Page | Description |
 |------|-------------|
 | **[Landing Page](https://williamproctor.github.io/growthx-system/system/index.html)** | The public-facing lead capture page. Hero, social proof, 8-module overview, qualification section, and gated email form. |
-| **[Content Inventory](https://williamproctor.github.io/growthx-system/inventory/index.html)** | Internal working tool. Maps each module against 105 vault assets. Includes source lists, gap analysis, and a clip map with 25 scored video sections ready for extraction. |
+| **[Content Inventory](https://williamproctor.github.io/growthx-system/inventory/index.html)** | Internal working tool. Maps each module against 105 vault assets. Includes source lists, gap analysis, and a clip map with 28 scored video sections. |
+| **[Modules](https://williamproctor.github.io/growthx-system/modules/)** | 7 learning modules with interleaved video clips and written content. Overview page for non-linear navigation. |
 | **[Self-Assessments](https://williamproctor.github.io/growthx-system/assessments/index.html)** | 39 interactive scenario-based questions across 7 modules. Module filtering, instant scoring, explanations, and final results breakdown. |
 | **[Hub](https://williamproctor.github.io/growthx-system/)** | Project dashboard linking everything together. |
 
