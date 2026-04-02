@@ -8,8 +8,8 @@
       startOnLoad: false,
       theme: theme,
       themeVariables: theme === 'dark'
-        ? { primaryColor: '#26262e', primaryTextColor: '#F1EEE9', lineColor: '#555', secondaryColor: '#1a1a1f', tertiaryColor: '#333', primaryBorderColor: '#444' }
-        : { primaryColor: '#E6E3DE', primaryTextColor: '#080A0D', lineColor: '#999', secondaryColor: '#F1EEE9', tertiaryColor: '#ddd', primaryBorderColor: '#B3B3B3' },
+        ? { primaryColor: '#26262e', primaryTextColor: '#F1EEE9', lineColor: '#555', secondaryColor: '#1a1a1f', tertiaryColor: '#333', primaryBorderColor: '#444', edgeLabelBackground: 'transparent' }
+        : { primaryColor: '#E6E3DE', primaryTextColor: '#080A0D', lineColor: '#999', secondaryColor: '#F1EEE9', tertiaryColor: '#ddd', primaryBorderColor: '#B3B3B3', edgeLabelBackground: 'transparent' },
       flowchart: { curve: 'monotoneX', padding: 12 },
       fontFamily: 'Inter, -apple-system, sans-serif',
       fontSize: 13
