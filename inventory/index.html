@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowthX System — Content Inventory & Gap Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;480;500;520;580;600;680&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<script src="../theme.js"></script>
+<style>
+/* Legacy tokens used by inline styles in clip map tables */
+:root {
+  --text: var(--text-primary);
+  --text-dim: var(--text-muted);
+  --bg: var(--background);
+  --surface: var(--card);
+  --surface-2: var(--secondary);
+  --sans: var(--font-sans);
+  --mono: var(--font-mono);
+  --gold: #996f1a;
+  --green: #1a7a45;
+  --amber: #a07b12;
+  --red: #b53228;
+}
+[data-theme="dark"] {
+  --gold: #c9a44a;
+  --green: #2d9c5e;
+  --amber: #d4a017;
+  --red: #d4453a;
+}
+
+.inventory-page {
+  padding: 88px clamp(16px, 4vw, 32px) 56px;
+  max-width: var(--content-normal);
+  margin: 0 auto;
+  line-height: 1.55;
+}
+
+.inventory-page table td {
+  vertical-align: top;
+}
+
+.inventory-page .header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.inventory-page .header h1 {
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 680;
+  letter-spacing: -0.05em;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.inventory-page .header p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 480;
+  letter-spacing: -0.02em;
+  line-height: 1.5;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legend-dot.ready { background: var(--green); }
+.legend-dot.partial { background: var(--amber); }
+.legend-dot.gap { background: var(--red); }
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.module {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.module-header:hover {
+  background: var(--surface-raised);
+}
+
+.module-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.module-title {
+  font-weight: 600;
+  font-size: 16px;
+  flex: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.status-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.status-ready {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--green);
+}
+
+.status-partial {
+  background: rgba(161, 124, 18, 0.1);
+  color: var(--amber);
+}
+
+.status-gap {
+  background: rgba(181, 50, 40, 0.1);
+  color: var(--red);
+}
+
+.chevron {
+  color: var(--text-muted);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.module.open .chevron {
+  transform: rotate(180deg);
+}
+
+.module-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.module.open .module-body {
+  max-height: 2000px;
+}
+
+.module-content {
+  padding: 0 24px 24px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+
+.source-list {
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+.source-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 480;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+.source-list li:last-child {
+  border-bottom: none;
+}
+
+.source-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.source-icon.workshop {
+  background: rgba(153, 111, 26, 0.12);
+  color: var(--gold);
+}
+
+.source-icon.editorial {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.source-icon.youtube {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.source-icon.newsletter {
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+}
+
+.source-icon.social {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.source-icon.loom {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--green);
+}
+
+.source-icon.luma {
+  background: rgba(234, 88, 12, 0.1);
+  color: #ea580c;
+}
+
+.source-icon.clip {
+  background: rgba(219, 39, 119, 0.1);
+  color: #db2777;
+}
+
+.source-icon.research {
+  background: rgba(8, 145, 178, 0.1);
+  color: #0891b2;
+}
+
+.source-icon.missing {
+  background: var(--secondary);
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .source-icon.editorial { background: rgba(59, 130, 246, 0.15); color: #5b9cff; }
+[data-theme="dark"] .source-icon.youtube { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+[data-theme="dark"] .source-icon.newsletter { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+[data-theme="dark"] .source-icon.social { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+[data-theme="dark"] .source-icon.loom { background: rgba(45, 156, 94, 0.15); }
+[data-theme="dark"] .source-icon.luma { background: rgba(249, 115, 22, 0.15); color: #fb923c; }
+[data-theme="dark"] .source-icon.clip { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+[data-theme="dark"] .source-icon.research { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+[data-theme="dark"] .source-icon.workshop { background: rgba(201, 164, 74, 0.12); }
+[data-theme="dark"] .source-icon.missing { background: rgba(255, 255, 255, 0.06); }
+
+.source-file {
+  color: var(--text-primary);
+  font-weight: 520;
+}
+
+.source-meta {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.source-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.source-status.complete {
+  color: var(--green);
+}
+
+.source-status.intake {
+  color: var(--amber);
+}
+
+.verdict {
+  background: var(--surface-raised);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+}
+
+.verdict strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.verdict-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.summary-bar {
+  margin-top: 48px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.summary-bar h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+
+.summary-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 680;
+  font-family: var(--font-mono);
+  letter-spacing: -0.03em;
+}
+
+.stat-value.green {
+  color: var(--green);
+}
+
+.stat-value.amber {
+  color: var(--amber);
+}
+
+.stat-value.red {
+  color: var(--red);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 480;
+}
+
+.action-list {
+  list-style: none;
+}
+
+.action-list li {
+  padding: 10px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+.action-list li:last-child {
+  border-bottom: none;
+}
+
+.action-list strong {
+  color: var(--text-primary);
+}
+
+.action-priority {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.action-priority.high {
+  background: rgba(181, 50, 40, 0.1);
+  color: var(--red);
+}
+
+.action-priority.med {
+  background: rgba(161, 124, 18, 0.1);
+  color: var(--amber);
+}
+
+.action-priority.low {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--green);
+}
+
+.action-list code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--surface-raised);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+}
+
+.clip-map-intro {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 24px;
+  line-height: 1.55;
+}
+
+/* ESSENTIAL cyan — brighter in dark mode */
+:root { --essential: #0891b2; }
+[data-theme="dark"] { --essential: #06b6d4; }
+
+@media (max-width: 768px) {
+  .inventory-page {
+    padding-top: 80px;
+  }
+  .legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .summary-stats {
+    gap: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <img src="../assets/growthx-logo-dark.svg" alt="GrowthX" width="120" height="20" />
+      <span class="nav-logo-divider" aria-hidden="true"></span>
+      <span class="nav-logo-label">Inventory</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Hub</a>
+      <a href="../system/index.html">Landing Page</a>
+      <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
+      <button class="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<main class="inventory-page">
+
+<div class="header">
+  <h1>Content Inventory & Gap Analysis</h1>
+  <p>Mapping the 8 landing page modules against 105 vault assets. Click each module to expand.</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot ready"></div>Ready (complete transcript, on-topic)</div>
+  <div class="legend-item"><div class="legend-dot partial"></div>Partial (needs trimming or supplementing)</div>
+  <div class="legend-item"><div class="legend-dot gap"></div>Gap (needs new recording)</div>
+</div>
+
+<div class="grid">
+
+  <!-- MODULE 01 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">01</div>
+      <div class="module-title">The 15-Minute System Overview</div>
+      <span class="status-badge status-gap">Gap</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">growthx-story-01-ceo-journey-and-mission.md</div><div class="source-meta">Editorial — Marcel's founder story & GrowthX mission. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon loom">L</div>
+          <div><div class="source-file">becoming-ai-native-in-gtm.md</div><div class="source-meta">Loom — AI-native GTM, high-level vision. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">growthx-story-03-ai-native-gtm-and-scale.md</div><div class="source-meta">Editorial — AI-native GTM at scale. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>No single overview exists.</strong> The editorial pieces and Loom cover the GrowthX story and AI-native GTM, but none is a crisp 15-min "system overview" that ties all 8 modules together. <strong>Marcel needs to record a dedicated intro video</strong> — a "Welcome to the GrowthX System" walkthrough. The existing content can inform the script, but the deliverable doesn't exist yet.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 02 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">02</div>
+      <div class="module-title">AI Visibility Playbook</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">ai-visibility-playbook-workshop.md</div><div class="source-meta">Workshop — 1.5hr, Marcel + Jason. Covers presence / reputation / alignment / influence framework, engine-by-engine differences, 600K citations study, mental models for AEO. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon luma">P</div>
+          <div><div class="source-file">ai-visibility-playbook-checkthat-workshop.md</div><div class="source-meta">Luma page — proven hook, 1K+ registrations. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon social">S</div>
+          <div><div class="source-file">ai-answers-playbook-trust-and-quality.md</div><div class="source-meta">Social post — trust & quality angle. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon research">R</div>
+          <div><div class="source-file">checkthat-geo-aeo-citation-study.md</div><div class="source-meta">Research — The proprietary study behind the "600K citations, 1.1M AI answers" data Marcel references. Universal signals, vendor-specific profiles, cross-vendor conflict map. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Strongest module.</strong> The workshop is a complete, high-quality 1.5hr recording with Marcel walking through the full presence/reputation/alignment/influence framework. The CheckThat citation study provides the proprietary data backbone — ~1M observations, 27K domains, 4 vendors — that gives this module its empirical authority. Package the workshop with the study findings as data exhibits. <strong>No new recording needed.</strong>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 03 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">03</div>
+      <div class="module-title">Content Strategy Framework</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">content-strategy-for-ai-answers.md</div><div class="source-meta">Workshop — 2hr+, Marcel + Jason. Covers audience-first approach, knowledge graphs, topic mapping, artifacts as source of truth, what LLMs reward. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-01-framework-topic-clusters.md</div><div class="source-meta">Editorial — topic cluster framework. <span class="source-status intake">intake</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-06-audience-research-methods.md</div><div class="source-meta">Editorial — hands-on audience research walkthrough with ChatGPT, Claude, Perplexity, Manus. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-07-audience-first-aeo.md</div><div class="source-meta">Editorial — audience-first AEO approach. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon luma">P</div>
+          <div><div class="source-file">content-strategy-ai-answers-geo-workshop.md</div><div class="source-meta">Luma page — 1,000+ registrations hook. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Rich and ready.</strong> The main workshop (2hr, complete transcript) is a deep content strategy session. The editorial series adds structured framework pieces, and the audience-research editorial gives a practical walkthrough. Trim to ~45-60 min of core strategy, layer the editorial pieces as reading companions. <strong>No new recording needed</strong> — editorial curation only.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 04 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">04</div>
+      <div class="module-title">Content Quality System</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">content-quality-for-ai-answers.md</div><div class="source-meta">Workshop — ~2hr, Marcel + Jason. Covers credible / comprehensive / fresh framework, one-shot vs. context-rich prompting, research sprints, writing guidelines creation, live demos. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon luma">P</div>
+          <div><div class="source-file">win-ai-search-content-quality-workshop.md</div><div class="source-meta">Luma page — "Win AI Search" quality hook. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon social">S</div>
+          <div><div class="source-file">stop-optimizing-for-machines-create-value.md</div><div class="source-meta">Social — quality-first philosophy. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">growthx-philosophy-02-hybrid-ai-human-publishing.md</div><div class="source-meta">Editorial — hybrid AI + human publishing model. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">practical-guide-improving-ai-outputs.md</div><div class="source-meta">ALG Library — 2-zone system: Artifacts (Object/Mood/Purpose/Anchors) + Process (Flip/Spread/Articulate/Chisel/Re-Anchor). Written companion to the workshop demos. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">quality-benchmarks.md</div><div class="source-meta">ALG Library — "How to Score Your Own Work." Quality scoring framework. <span class="source-status intake">intake</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon youtube">Y</div>
+          <div><div class="source-file">why-ai-content-sounds-generic-rag.md</div><div class="source-meta">YouTube — Danni Roseman. RAG explainer: why context artifacts matter, unbriefed freelancer analogy, garbage-in/garbage-out truth check. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon research">R</div>
+          <div><div class="source-file">checkthat-geo-aeo-citation-study.md</div><div class="source-meta">Research — Data-backed evidence for what AI engines consider "quality": documentation format (OR 1.58), authority (OR 1.71), academic citations (OR 1.64 Perplexity), FAQ pages penalized (OR 0.57). Validates the credible/comprehensive/fresh framework. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Exceptional.</strong> The main workshop walks through the full quality bar: credible, comprehensive, fresh — with live demos. The citation study now provides hard data backing every quality principle: documentation format outperforms (OR 1.58), domain authority matters (OR 1.71), SEO title patterns are penalized (OR 0.60), FAQ pages are universally avoided (OR 0.57). The Practical Guide adds the Artifacts + Process framework. The RAG video explains why context beats prompts. <strong>No new recording needed.</strong>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 05 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">05</div>
+      <div class="module-title">AEO Masterclass</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-04-aeo-masterclass.md</div><div class="source-meta">Editorial — Marcel's dedicated AEO Masterclass. Buyer behavior shift, audience-first approach, company context, ICP deep-dives, full first-principles breakdown. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">aeo-with-guy-from-webflow.md</div><div class="source-meta">Workshop — 53 min, Guy Yalif + Marcel. AEO maturity model (content, technical, authority, measurement), schema markup, authority signals, Webflow case study. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-05-editorial-manifesto-artifacts.md</div><div class="source-meta">Editorial — artifacts and editorial manifesto. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon luma">P</div>
+          <div><div class="source-file">own-ai-front-page-webflow-webinar.md</div><div class="source-meta">Luma page — Webflow co-branded webinar. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon research">R</div>
+          <div><div class="source-file">checkthat-geo-aeo-citation-study.md</div><div class="source-meta">Research — Vendor-specific AEO playbooks: OpenAI (authority + breadcrumb schema), Gemini (brevity + brand schema), Perplexity (depth + academic citations), Google AIO (authority-dominated). Funnel-stage analysis and cross-vendor conflict map. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Best-in-class.</strong> The AEO Masterclass editorial is Marcel's definitive first-principles breakdown. The Webflow workshop adds a practitioner perspective with Guy Yalif's maturity model. The citation study provides vendor-specific playbooks with hard data — what works on OpenAI differs dramatically from Perplexity (e.g., "What is" titles: OR 0.24 vs OR 2.10). Sequence: masterclass first, Webflow deep dive, study data as the evidence layer, YouTube as entry point. <strong>No new recording needed.</strong>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 06 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">06</div>
+      <div class="module-title">Starter Prompts & Artifacts</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">content-quality-for-ai-answers.md <span style="color:var(--text-dim)">(prompts section)</span></div><div class="source-meta">Workshop — Marcel demos research prompts, company context prompts, writing guidelines live. Prompts visible inline but not extracted. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-06-audience-research-methods.md</div><div class="source-meta">Editorial — shows audience-research prompt workflow in Claude, ChatGPT, Perplexity. Prompts embedded in narrative. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">content-strategy-05-editorial-manifesto-artifacts.md</div><div class="source-meta">Editorial — artifact structures (company context, writing guidelines, audience persona). <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">simplified-prompting-playbook.md</div><div class="source-meta">ALG Library — 8 real-world expert prompts across marketing, sales, ops, product, doc analysis, internal comms, and debugging. Core prompt patterns still partially gated. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">practical-guide-improving-ai-outputs.md</div><div class="source-meta">ALG Library — The Shaping Loop framework (Flip/Spread/Articulate/Chisel/Re-Anchor) for iterating AI outputs. Directly teaches how to refine prompts. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon youtube">Y</div>
+          <div><div class="source-file">chatgpt-shaping-loop-prompt-techniques.md</div><div class="source-meta">YouTube — Danni Roseman. Video walkthrough of the Shaping Loop framework with live examples. Companion to the written guide. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">positioning-assessment.md</div><div class="source-meta">ALG Library — 12-question self-assessment for B2B positioning strategy. 4 archetypes with GTM implications. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li style="opacity: 0.5;">
+          <div class="source-icon missing">?</div>
+          <div><div class="source-file">Notion doc referenced in workshops</div><div class="source-meta">Marcel: "I have all the prompts in a Notion doc that I'll send to everyone." <span class="source-status intake">not in vault</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Now ready.</strong> The Simplified Prompting Playbook provides 8 expert prompts as a standalone library. The Practical Guide and Shaping Loop video teach the meta-skill of iterating outputs. The Positioning Assessment adds an interactive artifact. Together with the existing workshop prompts and editorial artifact structures, this module has enough material to ship. Marcel's Notion doc would be a bonus addition. <strong>Action:</strong> Package the prompting playbook and Shaping Loop guide as the core deliverable; layer the workshop-embedded prompts as supplementary examples.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 07 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">07</div>
+      <div class="module-title">Measurement & Monitoring</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">ai-visibility-playbook-workshop.md <span style="color:var(--text-dim)">(final 20-30 min)</span></div><div class="source-meta">Workshop — measurement section covers presence/reputation/alignment/influence metrics, composite scoring, engine-level tracking. Woven into playbook, not standalone. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon newsletter">N</div>
+          <div><div class="source-file">monitoring-ai-mentions-citations.md</div><div class="source-meta">Newsletter — "Everyone's monitoring AI mentions & citations — now what?" Covers workflow for tracking ROI, LLM referrals, citations, branded search lift. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon workshop">W</div>
+          <div><div class="source-file">aeo-with-guy-from-webflow.md <span style="color:var(--text-dim)">(measurement section)</span></div><div class="source-meta">Workshop — Guy Yalif covers measurement maturity: from "am I mentioned?" to share-of-voice and sentiment. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">landing-page-spec-components.md</div><div class="source-meta">ALG Library — 7-component framework for AI-generated landing page specs: product vision, features, UX, components, design system, technical decisions, success metrics. Includes 10 gut-check questions. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">conversion-vault-library.md</div><div class="source-meta">ALG Library — CRO frameworks & swipe files. 7 data-backed A/B test patterns from a Figma board. Supplementary conversion lens for measurement. <span class="source-status complete">complete</span></div></div>
+        </li>
+        <li>
+          <div class="source-icon research">R</div>
+          <div><div class="source-file">checkthat-geo-aeo-citation-study.md</div><div class="source-meta">Research — CheckThat/GrowthX citation study. ~1M observations, 27K domains, 4 AI vendors, 196 features, 16 stratified models. Vendor-specific playbooks, funnel-stage analysis, brand-tier breakdowns, industry segments. Full odds ratios and actionable recommendations. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Now ready — the CheckThat study changes everything.</strong> The GEO/AEO citation study provides the empirical measurement framework this module was missing. It answers "what to measure" (196 features across 9 categories), "how to segment" (vendor, brand tier, funnel stage, industry), and "what actually matters" (universal signals vs. vendor-specific tactics). Combined with the workshop measurement sections and the monitoring newsletter, this module now has both the teaching philosophy (PRAI framework) and the data backbone to support it. Marcel's dedicated walkthrough would make it best-in-class, but it's shippable now.
+      </div>
+    </div></div>
+  </div>
+
+  <!-- MODULE 08 -->
+  <div class="module">
+    <div class="module-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="module-num">08</div>
+      <div class="module-title">Self-Assessments</div>
+      <span class="status-badge status-ready">Ready</span>
+      <svg class="chevron" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+    </div>
+    <div class="module-body"><div class="module-content">
+      <ul class="source-list">
+        <li>
+          <div class="source-icon editorial">E</div>
+          <div><div class="source-file">growthx-system-self-assessments.md</div><div class="source-meta">39 scenario-based quiz questions across all 7 modules (5-6 per module). Each with 4 options, correct answer, and "why this matters" explanation. Tests principles and thinking, not trivia. Includes Shaping Loop question for Module 06. <span class="source-status complete">complete</span></div></div>
+        </li>
+      </ul>
+      <div class="verdict">
+        <div class="verdict-label">Assessment</div>
+        <strong>Content is written — needs interactive packaging.</strong> 39 scenario-based questions covering Modules 01-07 are drafted and ready. Each question tests whether the learner absorbed the principles (e.g., "workflow before technology," context over prompts, PRAI framework). <strong>Remaining production task:</strong> package as an interactive quiz (Typeform, custom HTML component, or community platform feature). The content itself is complete.
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<!-- CLIP MAP -->
+<div class="summary-bar" style="margin-top:48px;">
+  <h2>Clip Map — Extractable Sections by Module</h2>
+  <p style="color:var(--text-dim); font-size:13px; margin-bottom:24px;">Strict re-evaluation: scored on Clarity / Narrative Structure / Standalone Viability (each 1-5). Ordered within each module for optimal narrative flow. <span style="color:var(--essential);">ESSENTIAL</span> (4.4+) = anchor clips. <span style="color:var(--green)">HIGH</span> (3.7-4.3) = clip-ready. <span style="color:var(--amber)">MEDIUM</span> (3.0-3.6) = needs trimming. Anything below 3.0 has been cut.</p>
+
+  <!-- Module 01 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">01</span> The 15-Minute System Overview
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">3 clips · ~10 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">1</td>
+        <td style="color:var(--gold);">becoming-ai-native-in-gtm.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:00:43 → ~0:04:00</td>
+        <td>~3m</td>
+        <td>The "why": buyer behavior shift, channels saturating, first sales call happens inside AI answers</td>
+        <td style="text-align:right; color:var(--green);">4.0 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">2</td>
+        <td style="color:var(--gold);">vibe-marketing-ceci-lovable.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:16:53 → 0:20:42</td>
+        <td>~4m</td>
+        <td>The philosophy: value-first, iterate fast, build in public, compound via systems. Named framework with four pillars</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">3</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:36:00 → 0:39:12</td>
+        <td>~3m</td>
+        <td>The model: sphere of influence (core → platforms → reputation), concentric layers you can control</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> Why → Philosophy → Model. <strong>Cut:</strong> becoming-ai-native 0:04:00–0:07:30 (compounding engine fragment — rapid-fire assertions with no definitions, starts mid-thought, same ground covered better in clip #3). <strong>Note:</strong> Module still needs Marcel's dedicated 15-min overview recording to be complete.
+    </div>
+  </div>
+
+  <!-- Module 02 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">02</span> AI Visibility Playbook
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">3 clips · ~26 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--essential);">1</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:21:03 → 0:31:55</td>
+        <td>~11m</td>
+        <td>How AI engines work: 3 layers (pre-training 60-82%, retrieval, post-training preferences), content flywheel, freshness decay (30d = 3.2x fewer), "websites control 82% of training data and 100% of retrieval"</td>
+        <td style="text-align:right; color:var(--essential);">4.7 ESSENTIAL</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">2</td>
+        <td style="color:var(--gold);">content-strategy-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:28:33 → 0:31:59</td>
+        <td>~3.5m</td>
+        <td>Jason's "four ground truths": everything long-tail + personal, refresh more often, better distribution, AI converging with value not SEO. <em style="color:var(--text-dim);">Trim: cut Marcel's overlapping intro (0:25:17–0:28:33)</em></td>
+        <td style="text-align:right; color:var(--amber);">3.3 MED</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">3</td>
+        <td style="color:var(--gold);">aeo-with-guy-from-webflow.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">[16:37] → [24:06]</td>
+        <td>~7.5m</td>
+        <td>Technical AEO + Authority: schema metadata (73% top-10 have it, 88% of sites don't), LLMs.txt, MCP servers, digital PR, E-E-A-T, unstructured mentions</td>
+        <td style="text-align:right; color:var(--green);">4.3 HIGH</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> Foundations (how engines work) → Practical implications (what they reward) → Technical implementation (what to build). Clip #1 is the strongest single teaching section in the entire lead magnet.
+    </div>
+  </div>
+
+  <!-- Module 03 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">03</span> Content Strategy Framework
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">4 clips · ~30 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">1</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:56:41 → 1:05:10</td>
+        <td>~8.5m</td>
+        <td>"Context is everything" — 25 context nodes across 4 categories (company/product/audience/market), LLM context window limitations, buyer question mapping, portfolio strategy</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">2</td>
+        <td style="color:var(--gold);">content-strategy-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:41:00 → 0:46:05</td>
+        <td>~5m</td>
+        <td>Audience-first deep-dive: job description, daily reality, JTBD, deliverables, KPIs, promotion/firing triggers, emotional mapping (fears, trust builders/killers)</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">3</td>
+        <td style="color:var(--gold);">content-strategy-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:32:21 → 0:40:00</td>
+        <td>~8m</td>
+        <td>Full content strategy walkthrough: research/audit → discovery → artifacts (company context, audience personas, writing guidelines). <em style="color:var(--text-dim);">Trim: cut live Perplexity demo after 0:40:00</em></td>
+        <td style="text-align:right; color:var(--amber);">3.3 MED</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">4</td>
+        <td style="color:var(--gold);">content-strategy-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">1:12:57 → 1:17:20</td>
+        <td>~5m</td>
+        <td>Topic mapping: 3 angles (competitive mind-share, audience JTBD, solution enablement), knowledge graph per persona. <em style="color:var(--text-dim);">Trim: cut Semrush/tagging walkthrough after 1:17:20</em></td>
+        <td style="text-align:right; color:var(--amber);">3.3 MED</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> Why context drives everything → How to understand your audience → The end-to-end process → How to map topics to opportunities. <strong>Cut:</strong> Lovable content engine walkthrough (client demo, not teaching), becoming-ai-native artifacts-first (2-min fragment, no definitions).
+    </div>
+  </div>
+
+  <!-- Module 04 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">04</span> Content Quality System
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">5 clips · ~28 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--essential);">1</td>
+        <td style="color:var(--gold);">why-ai-content-sounds-generic-rag.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">00:00 → 03:45</td>
+        <td>~3.75m</td>
+        <td>Why AI content fails: LLM snapshots, hallucination rates, "unbriefed freelancer" analogy, RAG as the fix. Perfect cold-open hook</td>
+        <td style="text-align:right; color:var(--essential);">5.0 ESSENTIAL</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">2</td>
+        <td style="color:var(--gold);">content-quality-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:13:30 → 0:20:32</td>
+        <td>~7m</td>
+        <td>Live one-shot vs context-rich demo: bare prompt → 40-50% quality, full artifacts → dramatically better. "It wasn't about the prompt — it was about the quality of the context"</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">3</td>
+        <td style="color:var(--gold);">content-strategy-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:45:26 → 0:49:07</td>
+        <td>~3.5m</td>
+        <td>Writing guidelines as quality artifact: adjective spectrum exercise, good/bad example pairs, brand voice calibration. Cursor rules / claude.md analogy</td>
+        <td style="text-align:right; color:var(--green);">4.0 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">4</td>
+        <td style="color:var(--gold);">content-quality-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:49:00 → 0:53:07</td>
+        <td>~4m</td>
+        <td>Augment Code "inception" case study: deep-context content didn't just get cited — it <em>changed the AI conversation itself</em>. Quality creates sustained citation</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">5</td>
+        <td style="color:var(--gold);">vibe-marketing-ceci-lovable.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">1:25:11 → 1:35:39</td>
+        <td>~10m</td>
+        <td>5-component framework: context artifacts, examples of good, decomposition, process blueprint, expert-in-the-loop piloting. Lovable template build as concrete demo</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> The problem (why AI content fails) → Proof (one-shot vs context demo) → The tool (writing guidelines) → The payoff (inception case study) → The system (5-component framework). <strong>Cut (4):</strong> credible/comprehensive/fresh framework (too process-heavy, screen-dependent), full production pipeline (visual-only walkthrough), writing guidelines Loom deep-dive (live tutorial, screen-dependent), iterative quality loop (workshop fragment).
+    </div>
+  </div>
+
+  <!-- Module 05 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">05</span> AEO Masterclass
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">6 clips · ~38 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">1</td>
+        <td style="color:var(--gold);">content-quality-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:03:53 → 0:10:09</td>
+        <td>~6m</td>
+        <td>The "why": buyer behavior shift, 15-20 min AI sessions, AI traffic converts 3-5x, Ramp citation example. "Your first sales call happens inside an AI answer"</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">2</td>
+        <td style="color:var(--gold);">content-strategy-for-ai-answers.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:15:08 → 0:21:55</td>
+        <td>~7m</td>
+        <td>Deepening the urgency: 3B daily AI users, 15-70% click disappearance, 4x LLM referral value, paid channel saturation. Hopeful close: quality of traffic is higher</td>
+        <td style="text-align:right; color:var(--green);">4.0 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--essential);">3</td>
+        <td style="color:var(--gold);">aeo-with-guy-from-webflow.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">[13:03] → [16:37]</td>
+        <td>~3.5m</td>
+        <td>4-pillar AEO maturity model: Content (keywords→answers), Technical (on-page→schema), Authority (backlinks→mentions), Measurement (ranking→share-of-voice). Entirely verbal, perfect standalone framework</td>
+        <td style="text-align:right; color:var(--essential);">5.0 ESSENTIAL</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">4</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:05:06 → 0:15:09</td>
+        <td>~10m</td>
+        <td>AEO definition + PRAI framework: Presence/Reputation/Alignment/Influence. Brand survey analogy, 3 audiences (buyers, AI engines, training bots)</td>
+        <td style="text-align:right; color:var(--green);">4.0 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">5</td>
+        <td style="color:var(--gold);">aeo-with-guy-from-webflow.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">[07:21] → [13:03]</td>
+        <td>~5.5m</td>
+        <td>Credibility proof: Webflow first-party data — 0% → 42% LLM traffic in 1 year, 6x conversion rate, hallucinated citations problem. "88% of websites haven't implemented schema yet"</td>
+        <td style="text-align:right; color:var(--green);">4.3 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">6</td>
+        <td style="color:var(--gold);">aeo-with-guy-from-webflow.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">[02:56] → [07:21]</td>
+        <td>~4.5m</td>
+        <td>Marcel reinforces: AI answers as first sales call, content quality bar (credible/comprehensive/fresh at scale), CMS as foundation</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> Urgency (buyer behavior) → Data proof (traffic disappearing) → The framework (4-pillar maturity model) → The operational definition (PRAI) → External validation (Webflow data) → Marcel's synthesis. <strong>Cut (2):</strong> CheckThat launch video (product pitch, not teaching), geo-aeo-full case studies (screen-dependent, can't survive audio extraction).
+    </div>
+  </div>
+
+  <!-- Module 06 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">06</span> Starter Prompts & Artifacts
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">2 clips · ~6 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--essential);">1</td>
+        <td style="color:var(--gold);">chatgpt-shaping-loop-prompt-techniques.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">01:03 → 04:32</td>
+        <td>~3.5m</td>
+        <td>Full Shaping Loop walkthrough: FLIP / SPREAD / ARTICULATE / CHISEL / RE-ANCHOR with before/after examples. "Context rot" stat (17-35% degradation after 10 turns). Polished, scripted, zero screen dependency</td>
+        <td style="text-align:right; color:var(--essential);">5.0 ESSENTIAL</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--essential);">2</td>
+        <td style="color:var(--gold);">why-ai-content-sounds-generic-rag.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">03:45 → 05:30</td>
+        <td>~2m</td>
+        <td>Context artifacts as RAG inputs: positioning docs, customer quotes, competitor analysis. "Output isn't generic anymore — it references your actual differentiators." $1.2B→$11B market data</td>
+        <td style="text-align:right; color:var(--essential);">4.7 ESSENTIAL</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> How to iterate on AI output (Shaping Loop) → How to feed it the right context (RAG artifacts). <strong>Cut (5):</strong> All five workshop/Loom sections failed standalone viability — they're live screen tutorials where the teaching relies on what's visible on screen. <strong style="color:var(--amber);">⚠ Warning:</strong> Module 06 has the most severe gap after strict re-scoring. The 5 cut sections contain excellent <em>content</em> but can't survive extraction. <strong>Recommendation:</strong> Script 2-3 new short-form clips that teach artifact creation (company context, audience persona, writing guidelines) without screen dependency.
+    </div>
+  </div>
+
+  <!-- Module 07 Clips -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">07</span> Measurement & Monitoring
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">5 clips · ~20 min</span>
+    </h3>
+    <table style="width:100%; font-size:13px; border-collapse:collapse;">
+      <tr style="border-bottom:1px solid var(--border); color:var(--text-dim); font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px;">
+        <td style="padding:8px 0; width:4%;">#</td>
+        <td style="width:26%;">Source</td>
+        <td style="width:16%;">Timestamps</td>
+        <td style="width:6%;">Dur.</td>
+        <td>Description</td>
+        <td style="width:14%; text-align:right;">Score</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">1</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:42:28 → 0:47:14</td>
+        <td>~5m</td>
+        <td>"What to measure first": leading vs lagging indicators, the tracking cascade (index → impression → click → engagement → conversion). "Don't start with conversions — it's a lagging indicator"</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">2</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">0:15:09 → 0:21:03</td>
+        <td>~6m</td>
+        <td>PRAI as measurement framework: Presence (consistency across engines), Reputation (market reality vs AI reality), Alignment (messaging accuracy), Influence (source control). "Websites control 82% of training data and 100% of retrieval"</td>
+        <td style="text-align:right; color:var(--green);">3.7 HIGH</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">3</td>
+        <td style="color:var(--gold);">aeo-with-guy-from-webflow.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">[24:33] → [26:59]</td>
+        <td>~2.5m</td>
+        <td>Measurement maturity progression: keyword ranking → ad-hoc mention checking → systematic measurement → share-of-voice + sentiment. "95% of ChatGPT citations &lt; 10 months old"</td>
+        <td style="text-align:right; color:var(--amber);">3.3 MED</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">4</td>
+        <td style="color:var(--gold);">ai-visibility-playbook-workshop.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">1:05:10 → 1:08:33</td>
+        <td>~3.5m</td>
+        <td>Composite scoring: visibility + position + sentiment + consistency + cross-engine. Citation rate by vendor, four-quadrant market analysis, Amazon catalog investment analogy</td>
+        <td style="text-align:right; color:var(--amber);">3.0 MED</td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 0; font-family:var(--mono); color:var(--gold);">5</td>
+        <td style="color:var(--gold);">vibe-marketing-ceci-lovable.md</td>
+        <td style="font-family:var(--mono); font-size:12px;">1:22:04 → 1:24:46</td>
+        <td>~3m</td>
+        <td>Connecting measurement to action: good-fit/bad-fit × high-intent/low-intent 2×2 framework. Deepgram 80% response rate from doc page visitors</td>
+        <td style="text-align:right; color:var(--amber);">3.3 MED</td>
+      </tr>
+    </table>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; margin-top:8px; font-size:12px; color:var(--text-dim);">
+      <strong style="color:var(--text);">Sequence logic:</strong> What to measure first (leading indicators) → How to measure it (PRAI framework) → How measurement evolves (maturity progression) → Advanced scoring → Connecting to business action. No cuts in this module — all 5 sections pass the bar.
+    </div>
+  </div>
+
+  <!-- Module 08 -->
+  <div style="margin-bottom:32px;">
+    <h3 style="font-size:15px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--mono); color:var(--gold); font-size:12px;">08</span> Self-Assessments
+      <span style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-left:auto;">0 sections</span>
+    </h3>
+    <div style="background:var(--surface-2); border-radius:6px; padding:12px; font-size:12px; color:var(--text-dim);">
+      No transcript sections found — expected. This is a quiz module built from the written self-assessments, not from video content.
+    </div>
+  </div>
+
+
+  <!-- Total counts -->
+  <div style="display:flex; gap:32px; flex-wrap:wrap; padding:20px 0; border-top:1px solid var(--border);">
+    <div class="stat"><div class="stat-value" style="color:var(--essential);">25</div><div class="stat-label">Clips surviving re-score</div></div>
+    <div class="stat"><div class="stat-value" style="color:var(--essential);">6</div><div class="stat-label">ESSENTIAL (4.4+)</div></div>
+    <div class="stat"><div class="stat-value green">14</div><div class="stat-label">HIGH (3.7-4.3)</div></div>
+    <div class="stat"><div class="stat-value amber">5</div><div class="stat-label">MEDIUM (3.0-3.6)</div></div>
+    <div class="stat"><div class="stat-value red">17</div><div class="stat-label">Cut from original 42</div></div>
+  </div>
+  <div style="background:var(--surface-2); border-radius:6px; padding:16px; margin-top:12px; font-size:12px; color:var(--text-dim);">
+    <strong style="color:var(--text); font-size:13px;">Key finding after strict re-score:</strong> The 17 cut sections share two traits — (1) <strong>screen dependency</strong> (live workshop demos where teaching relies on what's visible) and (2) <strong>mid-flow extraction</strong> (sections that start mid-thought from a previous segment). The 6 ESSENTIAL clips are all either polished YouTube productions or tight guest-expert framework deliveries. <strong style="color:var(--amber);">Module 06 has the most severe gap — needs 2-3 new scripted clips for artifact creation.</strong>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary-bar">
+  <h2>Summary & Recommended Next Actions</h2>
+  <div class="summary-stats">
+    <div class="stat"><div class="stat-value green">7</div><div class="stat-label">Ready to ship</div></div>
+    <div class="stat"><div class="stat-value amber">0</div><div class="stat-label">Need curation</div></div>
+    <div class="stat"><div class="stat-value red">1</div><div class="stat-label">Need new content</div></div>
+  </div>
+  <ul class="action-list">
+    <li>
+      <span class="action-priority high">P0</span>
+      <div><strong>Marcel records 15-min System Overview</strong> — The single most important gap. Script it from the editorial pieces. One take, teleprompter-style. This is the "hook" video that frames the entire lead magnet.</div>
+    </li>
+    <li>
+      <span class="action-priority low">P2</span>
+      <div><strong>Locate Marcel's Notion prompt doc (bonus)</strong> — The Simplified Prompting Playbook and Shaping Loop now cover Module 06 core content. Marcel's Notion doc would be a valuable supplement but is no longer blocking.</div>
+    </li>
+    <li>
+      <span class="action-priority low">P2</span>
+      <div><strong>Marcel records Measurement walkthrough (bonus)</strong> — The CheckThat study now provides the data backbone. A dedicated walkthrough featuring CheckThat would make Module 07 best-in-class but is no longer blocking.</div>
+    </li>
+    <li>
+      <span class="action-priority med">P1</span>
+      <div><strong>Package self-assessments as interactive quiz</strong> — 39 questions are written (<code>growthx-system-self-assessments.md</code>). Needs interactive UI: Typeform, custom HTML quiz component, or community platform embed.</div>
+    </li>
+    <li>
+      <span class="action-priority low">P2</span>
+      <div><strong>Chapter-mark and trim the 4 ready modules</strong> — Add timestamps to long workshop recordings, cut intro chatter, create clean chapter navigation for the gated experience.</div>
+    </li>
+    <li>
+      <span class="action-priority low">P2</span>
+      <div><strong>Write companion reading for each module</strong> — Use editorial series, social posts, and newsletter content as written companions alongside video. Short 500-word summaries per module.</div>
+    </li>
+  </ul>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="../assets/growthx-logo-dark.svg" alt="" width="96" height="16" />
+      <span>&copy; 2026 GrowthX</span>
+    </div>
+    <div class="footer-links">
+      <a href="../index.html">Hub</a>
+      <a href="../system/index.html">Landing Page</a>
+      <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
