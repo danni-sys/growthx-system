@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Starting Point — The GrowthX System</title>
+<meta name="description" content="5 questions to find where to start in the GrowthX System. Takes 2 minutes.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..680;1,14..32,400..680&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared.css">
+<script src="../theme.js"></script>
+<style>
+:root { --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace; }
+
+.quiz-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 120px clamp(16px, 4vw, 32px) 80px;
+}
+
+.quiz-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.quiz-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 680;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.quiz-desc {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  margin-bottom: 48px;
+}
+
+/* Progress */
+.progress-track {
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-gold);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progress-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+/* Question */
+.question-block { display: none; }
+.question-block.active { display: block; }
+
+.question-text {
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 580;
+  letter-spacing: -0.04em;
+  line-height: 1.3;
+  color: var(--text-primary);
+  margin-bottom: 28px;
+}
+
+/* Options */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-size: 15px;
+  font-weight: 480;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  line-height: 1.4;
+}
+
+.option-btn:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px var(--accent-gold-soft);
+}
+
+.option-btn.selected {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+}
+
+/* Nav */
+.quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.btn-back {
+  font-size: 14px;
+  font-weight: 480;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+
+.btn-back:hover { color: var(--text-primary); }
+.btn-back:disabled { opacity: 0; pointer-events: none; }
+
+.btn-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--foreground);
+  color: var(--background);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 580;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-next:hover { opacity: 0.85; }
+.btn-next:disabled { opacity: 0.3; cursor: default; }
+
+/* Result */
+.result-block { display: none; }
+.result-block.active { display: block; }
+
+.result-gap {
+  background: var(--accent-gold-soft);
+  border: 1px solid rgba(196, 154, 60, 0.25);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  margin-bottom: 32px;
+}
+
+.result-gap-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.result-gap-text {
+  font-size: 17px;
+  font-weight: 580;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.result-path-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.result-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.result-module {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.result-module:hover {
+  border-color: var(--text-muted);
+  box-shadow: var(--shadow);
+}
+
+.result-module.start {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+}
+
+.result-module-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  padding-top: 2px;
+  white-space: nowrap;
+}
+
+.result-module-body {}
+
+.result-module-title {
+  font-size: 15px;
+  font-weight: 580;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.result-module-desc {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: -0.02em;
+  line-height: 1.5;
+}
+
+.start-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: var(--background);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+  margin-left: auto;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.result-cta {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.result-cta a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/growthx-logo-dark.svg" alt="GrowthX" width="96" height="16">
+      <span class="nav-divider"></span>
+      <span class="nav-label">The System</span>
+    </a>
+    <div class="nav-links">
+      <a href="../modules/index.html">Modules</a>
+      <a href="../assessments/index.html">Self-Assessments</a>
+      <button class="theme-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="quiz-wrap">
+
+  <div id="quizIntro">
+    <p class="quiz-label">Find your starting point</p>
+    <h1 class="quiz-title">Before you dive in.</h1>
+    <p class="quiz-desc">5 quick questions so we can show you where to start and what your biggest gap is likely to be. Takes about 2 minutes. Module 01 is always the first stop — this tells you what to prioritize after that.</p>
+    <button class="btn-next" onclick="startQuiz()">Start <span>→</span></button>
+  </div>
+
+  <div id="quizMain" style="display:none;">
+    <div class="progress-label" id="progressLabel">Question 1 of 5</div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-block active" id="q1">
+      <p class="question-text">What's your biggest challenge with AI-led growth right now?</p>
+      <div class="options">
+        <button class="option-btn" onclick="selectOption(this, 1, 'visibility')">Getting found by AI engines — I don't know if we're showing up in answers</button>
+        <button class="option-btn" onclick="selectOption(this, 1, 'quality')">Content quality — we're producing content but it doesn't feel differentiated</button>
+        <button class="option-btn" onclick="selectOption(this, 1, 'strategy')">Strategy — I'm not sure what to prioritize or where to focus first</button>
+        <button class="option-btn" onclick="selectOption(this, 1, 'measurement')">Measurement — I don't know what to track or how to show it's working</button>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn-back" disabled>Back</button>
+        <button class="btn-next" id="next1" disabled onclick="goNext(2)">Next <span>→</span></button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block" id="q2">
+      <p class="question-text">How would you describe your team's current approach to AI tools?</p>
+      <div class="options">
+        <button class="option-btn" onclick="selectOption(this, 2, 'early')">We're just getting started — haven't built anything systematic yet</button>
+        <button class="option-btn" onclick="selectOption(this, 2, 'prompts')">We're using AI tools but mostly one-shot prompts with mixed results</button>
+        <button class="option-btn" onclick="selectOption(this, 2, 'workflows')">We have workflows, but they're not well-documented or consistent</button>
+        <button class="option-btn" onclick="selectOption(this, 2, 'system')">We have a system — I'm here to sharpen the thinking behind it</button>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn-back" onclick="goBack(1)">Back</button>
+        <button class="btn-next" id="next2" disabled onclick="goNext(3)">Next <span>→</span></button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block" id="q3">
+      <p class="question-text">When you think about content, where does most of the effort go?</p>
+      <div class="options">
+        <button class="option-btn" onclick="selectOption(this, 3, 'creation')">Creating new content — volume is the focus</button>
+        <button class="option-btn" onclick="selectOption(this, 3, 'optimization')">Optimizing existing content — we have a lot, it's just not performing</button>
+        <button class="option-btn" onclick="selectOption(this, 3, 'context')">Building context and process — getting the inputs right before we produce more</button>
+        <button class="option-btn" onclick="selectOption(this, 3, 'unsure')">Honestly, it varies — we don't have a clear process</button>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn-back" onclick="goBack(2)">Back</button>
+        <button class="btn-next" id="next3" disabled onclick="goNext(4)">Next <span>→</span></button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-block" id="q4">
+      <p class="question-text">If a buyer searched for your category in ChatGPT right now, what would happen?</p>
+      <div class="options">
+        <button class="option-btn" onclick="selectOption(this, 4, 'invisible')">We probably wouldn't show up at all</button>
+        <button class="option-btn" onclick="selectOption(this, 4, 'inconsistent')">We show up sometimes, but what AI says about us isn't always accurate</button>
+        <button class="option-btn" onclick="selectOption(this, 4, 'present')">We show up but we're not sure how consistently or what's driving it</button>
+        <button class="option-btn" onclick="selectOption(this, 4, 'tracking')">We're tracking this actively and have a baseline</button>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn-back" onclick="goBack(3)">Back</button>
+        <button class="btn-next" id="next4" disabled onclick="goNext(5)">Next <span>→</span></button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-block" id="q5">
+      <p class="question-text">What does success look like for you in the next 90 days?</p>
+      <div class="options">
+        <button class="option-btn" onclick="selectOption(this, 5, 'foundation')">Building the right foundation — understanding the system before doing more</button>
+        <button class="option-btn" onclick="selectOption(this, 5, 'visibility')">Showing up in AI answers for our core category</button>
+        <button class="option-btn" onclick="selectOption(this, 5, 'quality')">Publishing content that AI engines actually cite and trust</button>
+        <button class="option-btn" onclick="selectOption(this, 5, 'proof')">Having data that proves AI-led growth is working</button>
+      </div>
+      <div class="quiz-nav">
+        <button class="btn-back" onclick="goBack(4)">Back</button>
+        <button class="btn-next" id="next5" disabled onclick="showResult()">See my starting point <span>→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-block" id="quizResult">
+    <p class="quiz-label">Your starting point</p>
+    <h2 class="quiz-title" id="resultTitle">Here's where to begin.</h2>
+
+    <div class="result-gap">
+      <div class="result-gap-label">Your primary gap</div>
+      <div class="result-gap-text" id="resultGap">Loading...</div>
+    </div>
+
+    <p class="result-path-label">Recommended path</p>
+    <div class="result-modules" id="resultModules"></div>
+
+    <p class="result-cta">
+      Module 01 is always the first stop — it's the 15-minute overview that frames everything else. After that, follow the path above. You can also <a href="../modules/index.html">browse all 7 modules</a> or <a href="../assessments/index.html">test your current knowledge</a> first.
+    </p>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="../assets/growthx-logo-dark.svg" alt="" width="96" height="16">
+      <span>&copy; 2026 GrowthX</span>
+    </div>
+    <div class="footer-links">
+      <a href="../modules/index.html">Modules</a>
+      <a href="https://growthx.ai" target="_blank" rel="noopener noreferrer">growthx.ai</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+var answers = {};
+
+var modules = {
+  '01': { title: 'The 15-Minute System Overview', desc: 'How AI rewired the way buyers find and trust your company. The frame for everything else.', href: '../modules/01.html' },
+  '02': { title: 'AI Visibility Playbook', desc: 'How AI engines decide what to cite, and how to build content they trust.', href: '../modules/02.html' },
+  '03': { title: 'Content Strategy Framework', desc: 'Audience-first strategy: buyer question mapping, topic prioritization, and context artifacts.', href: '../modules/03.html' },
+  '04': { title: 'Content Quality System', desc: 'Why context beats prompt engineering, and how to build expert-in-the-loop publishing.', href: '../modules/04.html' },
+  '05': { title: 'AEO Masterclass', desc: 'Answer Engine Optimization from first principles. The 4-pillar maturity model and PRAI framework.', href: '../modules/05.html' },
+  '06': { title: 'Starter Prompts and Artifacts', desc: 'The context artifacts that make AI outputs yours: company context, personas, writing guidelines.', href: '../modules/06.html' },
+  '07': { title: 'Measurement and Monitoring', desc: 'Leading vs. lagging indicators, composite scoring, and connecting measurement to action.', href: '../modules/07.html' }
+};
+
+var paths = {
+  visibility:    { gap: 'You know AI visibility is important but don\'t have a clear picture of where you stand or how to improve it.', path: ['01','02','05','07'] },
+  quality:       { gap: 'You\'re producing content but the outputs aren\'t differentiated. The gap is context, not effort.', path: ['01','04','06','03'] },
+  strategy:      { gap: 'You\'re not sure where to focus. The system overview and strategy framework will give you the map.', path: ['01','03','02','05'] },
+  measurement:   { gap: 'You\'re doing the work but can\'t prove it\'s working. You need a measurement framework before adding more output.', path: ['01','07','05','02'] },
+  foundation:    { gap: 'You\'re building from scratch. Start with the full picture before optimizing any single piece.', path: ['01','02','03','04'] },
+  proof:         { gap: 'You need data to show AI-led growth is working. Start with the system, then the measurement layer.', path: ['01','07','05','04'] }
+};
+
+function startQuiz() {
+  document.getElementById('quizIntro').style.display = 'none';
+  document.getElementById('quizMain').style.display = 'block';
+}
+
+function selectOption(btn, qNum, value) {
+  var opts = btn.closest('.options').querySelectorAll('.option-btn');
+  opts.forEach(function(o) { o.classList.remove('selected'); });
+  btn.classList.add('selected');
+  answers['q' + qNum] = value;
+  document.getElementById('next' + qNum).disabled = false;
+}
+
+function goNext(qNum) {
+  document.querySelectorAll('.question-block').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('q' + qNum).classList.add('active');
+  var pct = (qNum / 5) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = 'Question ' + qNum + ' of 5';
+}
+
+function goBack(qNum) {
+  document.querySelectorAll('.question-block').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('q' + qNum).classList.add('active');
+  var pct = (qNum / 5) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = 'Question ' + qNum + ' of 5';
+}
+
+function showResult() {
+  document.getElementById('quizMain').style.display = 'none';
+  document.getElementById('quizResult').classList.add('active');
+
+  // Determine primary gap from Q1 answer, fallback to Q5
+  var primary = answers['q1'] || answers['q5'] || 'foundation';
+  if (answers['q5'] === 'proof') primary = 'proof';
+  if (answers['q5'] === 'foundation') primary = 'foundation';
+
+  var result = paths[primary] || paths['foundation'];
+
+  document.getElementById('resultGap').textContent = result.gap;
+
+  var container = document.getElementById('resultModules');
+  container.innerHTML = '';
+  result.path.forEach(function(modId, i) {
+    var mod = modules[modId];
+    var isStart = i === 0;
+    var el = document.createElement('a');
+    el.href = mod.href;
+    el.className = 'result-module' + (isStart ? ' start' : '');
+    el.innerHTML =
+      '<span class="result-module-num">Module ' + modId + '</span>' +
+      '<span class="result-module-body">' +
+        '<span class="result-module-title">' + mod.title + '</span>' +
+        '<span class="result-module-desc" style="display:block;">' + mod.desc + '</span>' +
+      '</span>' +
+      (isStart ? '<span class="start-badge">Start here</span>' : '');
+    container.appendChild(el);
+  });
+}
+</script>
+<script src="../nav.js"></script>
+</body>
+</html>
