@@ -41,6 +41,10 @@
   --radius-sm: 4px;
   --radius-pill: 60px;
 
+  /* ── Accent ── */
+  --accent-gold: #C49A3C;
+  --accent-gold-soft: rgba(196, 154, 60, 0.12);
+
   /* ── Shadows (use sparingly per brand guide) ── */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
@@ -61,6 +65,8 @@
   --text-muted: #6b6b6b;
   --surface: #111114;
   --surface-raised: #1a1a1f;
+  --accent-gold: #d4a843;
+  --accent-gold-soft: rgba(212, 168, 67, 0.12);
 }
 
 [data-theme="dark"] .site-nav {
@@ -763,8 +769,8 @@ body {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #b8922f;
-  background: rgba(184, 146, 47, 0.1);
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
   padding: 3px 8px;
   border-radius: var(--radius-pill);
 }
@@ -960,12 +966,146 @@ body {
 .reveal-d2 { transition-delay: 0.16s; }
 .reveal-d3 { transition-delay: 0.24s; }
 
+/* ── NAV CLASS ALIASES (module pages use these) ── */
+.nav-divider { width: 1px; height: 16px; background: var(--border); }
+.nav-label { font-size: 13px; font-weight: 480; color: var(--text-muted); letter-spacing: -0.03em; }
+
+/* ── MOBILE HAMBURGER ── */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--text-primary);
+  z-index: 102;
+}
+
+.nav-hamburger svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.nav-hamburger .icon-close { display: none; }
+.nav-hamburger.open .icon-menu { display: none; }
+.nav-hamburger.open .icon-close { display: block; }
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.nav-overlay.open { display: block; }
+
+.nav-drawer {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  z-index: 101;
+  background: var(--background);
+  border-left: 1px solid var(--border);
+  padding: 80px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-drawer.open {
+  transform: translateX(0);
+}
+
+.nav-drawer a {
+  font-size: 16px;
+  font-weight: 520;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: color 0.2s;
+  letter-spacing: -0.03em;
+}
+
+.nav-drawer a:hover,
+.nav-drawer a[aria-current="page"] {
+  color: var(--text-primary);
+}
+
+.nav-drawer .theme-toggle {
+  margin-top: 16px;
+  align-self: flex-start;
+}
+
+/* ── PLAY OVERLAY (inline video clips) ── */
+.inline-clip-body {
+  position: relative;
+  cursor: pointer;
+}
+
+.inline-clip-body .play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  transition: opacity 0.3s;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.inline-clip-body .play-overlay svg {
+  width: 48px;
+  height: 48px;
+  fill: rgba(255, 255, 255, 0.85);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s;
+}
+
+.inline-clip-body:hover .play-overlay svg {
+  transform: scale(1.08);
+}
+
+.inline-clip-body.playing .play-overlay {
+  opacity: 0;
+}
+
+/* ── FOCUS STATES ── */
+:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.btn:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.nav-links a:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
-  .nav-links { gap: 16px; }
-  .nav-links a { font-size: 13px; }
-  .nav-logo-label { display: none; }
-  .nav-logo-divider { display: none; }
+  .nav-links a, .nav-links .theme-toggle { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-logo-label, .nav-logo-divider { display: none; }
+  .nav-divider, .nav-label { display: none; }
 
   .hero { padding: 100px 16px 56px; }
 
