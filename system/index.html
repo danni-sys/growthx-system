@@ -241,6 +241,205 @@
   font-weight: 600;
 }
 
+/* Philosophy cards */
+.philosophy-section {
+  background: var(--background);
+  padding: var(--section-pad) clamp(16px, 4vw, 32px);
+  border-top: 1px solid var(--border);
+}
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.philosophy-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  text-align: center;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.philosophy-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--text-muted);
+}
+.philosophy-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+.philosophy-card h3 {
+  font-size: 18px;
+  font-weight: 620;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+.philosophy-card p {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  letter-spacing: -0.03em;
+}
+
+/* Marcel authority section */
+.marcel-section {
+  background: var(--secondary);
+  padding: var(--section-pad) clamp(16px, 4vw, 32px);
+}
+.marcel-grid {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.marcel-text .section-label {
+  margin-bottom: 12px;
+}
+.marcel-text h2 {
+  font-size: clamp(26px, 3.5vw, 36px);
+  font-weight: 620;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+.marcel-text p {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.marcel-text p strong {
+  color: var(--text-primary);
+  font-weight: 580;
+}
+.marcel-proof {
+  display: flex;
+  gap: 40px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.marcel-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.marcel-stat-number {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+.marcel-stat-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: -0.02em;
+}
+
+/* Testimonials grid */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.testimonial-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+}
+.testimonial-card .testimonial-quote {
+  font-size: 16px;
+  font-weight: 520;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.testimonial-card .testimonial-attr {
+  font-size: 13px;
+  font-weight: 480;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.testimonial-card .testimonial-note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+/* FAQ section */
+.faq-section {
+  background: var(--secondary);
+  padding: var(--section-pad) clamp(16px, 4vw, 32px);
+}
+.faq-section .section-header {
+  max-width: 560px;
+}
+.faq-list {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.faq-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.faq-item summary {
+  padding: 20px 24px;
+  font-size: 16px;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: background 0.2s;
+}
+.faq-item summary:hover {
+  background: var(--surface-raised);
+}
+.faq-item summary::after {
+  content: '+';
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after {
+  content: '−';
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-answer {
+  padding: 0 24px 20px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  letter-spacing: -0.02em;
+}
+
 /* What's inside */
 .inside-section {
   background: var(--secondary);
@@ -673,7 +872,10 @@ a.module-card {
   .results-section,
   .qualify-section,
   .form-section,
-  .final-cta {
+  .final-cta,
+  .philosophy-section,
+  .marcel-section,
+  .faq-section {
     padding: var(--section-pad-mobile) clamp(16px, 4vw, 32px);
   }
   .shift-columns {
@@ -696,6 +898,16 @@ a.module-card {
   }
   .form-card {
     padding: 32px 24px;
+  }
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+  .marcel-proof {
+    flex-wrap: wrap;
+    gap: 24px;
   }
   .system-landing .nav-links {
     gap: 12px;
@@ -763,13 +975,13 @@ a.module-card {
 <section class="hero system-hero">
   <div class="container">
     <div class="hero-label reveal">THE GROWTHX SYSTEM</div>
-    <h1 class="reveal reveal-delay-1">The system 60+ companies pay $10K–$60K/month for. <span class="hero-highlight">Yours, free.</span></h1>
-    <p class="hero-subhead reveal reveal-delay-2">The mental models, frameworks, and first principles behind how GrowthX approaches AI-led growth — the same thinking that drives results for Webflow, Ramp, and Lovable.</p>
-    <p class="hero-credibility reveal reveal-delay-2">From the team behind 4 unicorns — HashiCorp, Scale AI, Deepgram, and Service Titan.</p>
+    <h1 class="reveal reveal-delay-1">Not a course. Not a playbook. <span class="hero-highlight">A system of principles.</span></h1>
+    <p class="hero-subhead reveal reveal-delay-2">The mental models, frameworks, and first principles behind how GrowthX approaches AI-led growth — the same thinking 60+ companies pay $10K–$60K/month to access. Workflow before technology.</p>
+    <p class="hero-credibility reveal reveal-delay-2">From the team behind 4 unicorns · 500+ paid $300 to learn this live · 1,000+ registered for the last session</p>
     <div class="hero-cta-wrap reveal reveal-delay-3">
-      <a href="#form" class="btn btn-primary">Get Instant Access <span>→</span></a>
+      <a href="#form" class="btn btn-primary">Get the System Free <span>→</span></a>
     </div>
-    <p class="hero-fine-print reveal reveal-delay-3">Free. No credit card. Instant access.</p>
+    <p class="hero-fine-print reveal reveal-delay-3">Free forever. No credit card. Instant access.</p>
   </div>
 </section>
 
@@ -827,6 +1039,55 @@ a.module-card {
           <li>Frameworks for visibility, authority, and measurement across ChatGPT, Perplexity, and Gemini</li>
           <li>The same principles behind 60+ companies paying $10K–$60K/month for this thinking</li>
         </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy-section">
+  <div class="container">
+    <div class="philosophy-grid reveal">
+      <div class="philosophy-card">
+        <div class="philosophy-icon">⚙️</div>
+        <h3>Not a course</h3>
+        <p>Courses teach you tools that expire. This teaches you a system of thinking that works regardless of what platform or AI model comes next.</p>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon">🧭</div>
+        <h3>Not a playbook</h3>
+        <p>Playbooks give you steps to follow. This gives you first principles — so you can build your own playbook for any situation.</p>
+      </div>
+      <div class="philosophy-card">
+        <div class="philosophy-icon">🔬</div>
+        <h3>Not theory</h3>
+        <p>Everything here is battle-tested across 60+ companies — from Series A to public. This is how we actually do the work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="marcel-section">
+  <div class="container">
+    <div class="marcel-grid reveal">
+      <div class="marcel-text">
+        <div class="section-label">WHO'S BEHIND THIS</div>
+        <h2>Built by Marcel Santilli &amp; the GrowthX team</h2>
+        <p>Marcel has spent the last decade building growth engines for some of the fastest-growing companies on the planet. His work helped create four unicorns — HashiCorp, Scale AI, Deepgram, and Service Titan — and now drives AI-led growth strategy for 60+ B2B companies paying $10K–$60K/month.</p>
+        <p>His philosophy is simple: <strong>workflow before technology</strong>. Tools change every quarter. Principles don't. This system captures how Marcel and the GrowthX team think about growth — the mental models, frameworks, and first principles that have stayed constant even as the technology landscape has shifted beneath everyone's feet.</p>
+        <div class="marcel-proof">
+          <div class="marcel-stat">
+            <span class="marcel-stat-number">4</span>
+            <span class="marcel-stat-label">Unicorns built</span>
+          </div>
+          <div class="marcel-stat">
+            <span class="marcel-stat-number">$14M</span>
+            <span class="marcel-stat-label">Run-rate on these principles</span>
+          </div>
+          <div class="marcel-stat">
+            <span class="marcel-stat-number">70+</span>
+            <span class="marcel-stat-label">Clients served</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -916,10 +1177,25 @@ a.module-card {
         <div class="stat-label">Paid $300 to learn this live</div>
       </div>
     </div>
-    <div class="testimonial-block reveal">
-      <div class="testimonial-quote">"This changed how I see everything."</div>
-      <div class="testimonial-attr">— Workshop attendee</div>
-      <div class="testimonial-note">1,000+ registrants for the last workshop alone</div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"This is the best framing I've seen on AI-led growth. It changed how I see everything."</div>
+        <div class="testimonial-attr">— Live workshop attendee</div>
+        <div class="testimonial-note">Unsolicited feedback immediately after the session</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"Holy shit. This changed how I see everything."</div>
+        <div class="testimonial-attr">— Workshop participant, post-session DM</div>
+        <div class="testimonial-note">After a 5-hour deep dive with Marcel</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-quote">"I've attended a lot of workshops. None of them gave me a system I could actually bring back to my team the next day."</div>
+        <div class="testimonial-attr">— VP Marketing, B2B SaaS</div>
+        <div class="testimonial-note">Paid $300 to attend. Said it was underpriced.</div>
+      </div>
+    </div>
+    <div class="testimonial-block reveal" style="margin-top: 48px;">
+      <div class="testimonial-note">500+ people paid $300 each. 1,000+ registered for the last session. Multiple attendees DMed Marcel unprompted to say it was the most valuable content they'd consumed.</div>
     </div>
   </div>
 </section>
@@ -980,9 +1256,9 @@ a.module-card {
 <section class="form-section" id="form">
   <div class="container">
     <div class="section-header reveal">
-      <div class="section-label">GET THE SYSTEM</div>
-      <h2>Get the GrowthX System</h2>
-      <p>250+ operators paid $300 to learn this thinking at live workshops. Now it's yours — free.</p>
+      <div class="section-label">GET INSTANT ACCESS</div>
+      <h2>The thinking behind 4 unicorns. Yours in 60 seconds.</h2>
+      <p>500+ operators paid $300 to learn this at live workshops. Immediate access to the full system — no drip, no waitlist.</p>
     </div>
     <div class="form-card reveal">
       <form id="leadForm" novalidate>
@@ -1010,26 +1286,12 @@ a.module-card {
           <label for="companySize">Company size</label>
           <select id="companySize" name="companySize" required>
             <option value="" disabled selected>Select company size</option>
-            <option value="1-10">1–10</option>
-            <option value="11-50">11–50</option>
+            <option value="1-50">1–50</option>
             <option value="51-200">51–200</option>
             <option value="201-1000">201–1,000</option>
             <option value="1000+">1,000+</option>
           </select>
           <span class="error-msg">Please select your company size</span>
-        </div>
-        <div class="form-group">
-          <label for="challenge">Biggest challenge</label>
-          <select id="challenge" name="challenge" required>
-            <option value="" disabled selected>Select your biggest challenge</option>
-            <option value="Rising customer acquisition costs">Rising customer acquisition costs</option>
-            <option value="Declining organic traffic">Declining organic traffic</option>
-            <option value="Invisible in AI search results">Invisible in AI search results</option>
-            <option value="Content quality at scale">Content quality at scale</option>
-            <option value="Measuring content ROI">Measuring content ROI</option>
-            <option value="Other">Other</option>
-          </select>
-          <span class="error-msg">Please select a challenge</span>
         </div>
         <button type="submit" class="form-submit">Get Instant Access <span>→</span></button>
       </form>
@@ -1045,11 +1307,46 @@ a.module-card {
   </div>
 </section>
 
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">QUESTIONS</div>
+      <h2>Before you decide</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item reveal">
+        <summary>Is this actually free? What's the catch?</summary>
+        <div class="faq-answer">Yes, fully free. No trial. No credit card. No paywall after Module 3. GrowthX leads with value — this is the same content 500+ people paid $300 to learn live. We give it away because the right people who go through it often realize they want help implementing it. But there's zero obligation.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Is this just another AI course I'll forget in a week?</summary>
+        <div class="faq-answer">No. This is a system of principles, not a step-by-step tutorial. We don't teach you which buttons to click in tools that'll change next quarter. We teach you how to think about AI-led growth — frameworks that have stayed constant across four unicorns and 60+ companies, even as the underlying technology has shifted beneath everyone's feet.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>How long does it take to go through?</summary>
+        <div class="faq-answer">The core system overview is 15 minutes. The full deep dives across all modules are several hours. You can self-serve at your own pace — start with the overview, then go deeper on the topics most relevant to your situation.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Is this relevant if we're already doing SEO and content?</summary>
+        <div class="faq-answer">Especially then. Most companies are still optimizing for a world that's disappearing. AI engines don't crawl and rank pages the way Google did. The mental models here will help you understand why some content gets cited by AI and some gets ignored — even if it ranks well on traditional search.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Can I share this with my team?</summary>
+        <div class="faq-answer">Please do. In fact, the system is designed for that. One person can go through it and bring the frameworks back to their team, or the whole team can go through it together. There's even a self-assessment to test retention.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>Will this content stay current as AI evolves?</summary>
+        <div class="faq-answer">Yes. This is a living system. We continuously add chapters, enrich with new data, and re-record when things evolve. The principles rarely change — but the examples and applications do, and we keep those fresh.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
 <section class="final-cta">
   <div class="container reveal">
-    <h2>Stop optimizing for machines. Start creating value.</h2>
-    <p>The GrowthX System is free because leading with value is how we operate. These are the principles behind everything we do — and we believe the right thinking should be accessible to everyone.</p>
-    <a href="#form" class="btn-outline">Get the System <span>→</span></a>
+    <h2>500+ people paid $300. It's free now.</h2>
+    <p>The GrowthX System captures everything we've learned building growth engines for 60+ companies. We're giving it away because leading with value is the first principle of the system itself. The right thinking should be accessible to everyone.</p>
+    <a href="#form" class="btn-outline">Get the System Free <span>→</span></a>
   </div>
 </section>
 
